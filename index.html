@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es" data-bs-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MyLetterboxd — Explora, reseña y guarda películas</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&amp;family=Lora:wght@400;700&amp;display=swap" rel="stylesheet">
+  <link href="CSS/styles.css" rel="stylesheet">
+</head>
+<body id="inicio">
+  <header>
+    <nav class="navbar navbar-expand-md sticky-top ml-nav" aria-label="Principal">
+      <div class="container-fluid px-3 px-md-4">
+        <a class="navbar-brand ml-logo" href="index.html">MyLetterboxd</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu" aria-controls="menu" aria-expanded="false" aria-label="Abrir menú">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="menu">
+          <ul class="navbar-nav mx-md-auto ml-nav-links">
+            <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
+            <li class="nav-item"><a class="nav-link" href="#catalogo">Películas</a></li>
+            <li class="nav-item"><a class="nav-link" href="#favoritas">Favoritas</a></li>
+          </ul>
+          <form class="d-flex" id="form-buscar" action="index.html" method="get" role="search">
+            <label class="visually-hidden" for="buscar">Buscar por título o género</label>
+            <input class="form-control form-control-sm" id="buscar" name="q" type="search" placeholder="Buscar título o género" autocomplete="off">
+          </form>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="hero-titulo">
+      <div class="container" id="destacada"></div>
+    </section>
+
+    <div class="container">
+      <section class="ml-section" aria-labelledby="t-recientes">
+        <h2 class="ml-eyebrow" id="t-recientes">Películas recientes</h2>
+        <div class="row row-cols-3 row-cols-sm-4 row-cols-md-6 row-cols-xl-8 g-2" id="recientes"></div>
+      </section>
+
+      <section class="ml-section" id="catalogo" aria-labelledby="t-catalogo">
+        <h2 class="ml-eyebrow" id="t-catalogo">Catálogo</h2>
+        <div class="row g-2 mb-3 align-items-end">
+          <div class="col-6 col-sm-3 col-md-2">
+            <label class="form-label ml-label" for="f-genero">Género</label>
+            <select class="form-select form-select-sm" id="f-genero"><option value="">Todos</option></select>
+          </div>
+          <div class="col-6 col-sm-3 col-md-2">
+            <label class="form-label ml-label" for="f-anio">Año</label>
+            <select class="form-select form-select-sm" id="f-anio"><option value="">Todos</option></select>
+          </div>
+          <div class="col-6 col-sm-3 col-md-2">
+            <label class="form-label ml-label" for="f-min">Calificación mín.</label>
+            <select class="form-select form-select-sm" id="f-min">
+              <option value="0">Cualquiera</option><option value="1">1★ o más</option><option value="2">2★ o más</option>
+              <option value="3">3★ o más</option><option value="4">4★ o más</option><option value="5">5★</option>
+            </select>
+          </div>
+          <div class="col-6 col-sm-3 col-md-2">
+            <label class="form-label ml-label" for="f-orden">Ordenar por</label>
+            <select class="form-select form-select-sm" id="f-orden">
+              <option value="fecha">Fecha de estreno</option><option value="anio">Año</option><option value="calificacion">Calificación</option>
+            </select>
+          </div>
+          <div class="col-6 col-sm-6 col-md-2">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="f-fav">
+              <label class="form-check-label ml-label" for="f-fav">Solo favoritas</label>
+            </div>
+          </div>
+          <div class="col-6 col-sm-6 col-md-2">
+            <button type="button" class="btn btn-sm btn-ml-secondary w-100" id="limpiar">Limpiar filtros</button>
+          </div>
+        </div>
+        <p class="ml-meta" id="contador" aria-live="polite"></p>
+        <div class="row row-cols-3 row-cols-sm-4 row-cols-md-6 row-cols-xl-8 g-2" id="grid"></div>
+        <p class="ml-empty d-none" id="sin-resultados">No hay películas que coincidan con la búsqueda o los filtros.</p>
+      </section>
+
+      <section class="ml-section" aria-labelledby="t-destacadas">
+        <h2 class="ml-eyebrow" id="t-destacadas">Mejor calificadas</h2>
+        <div class="row row-cols-3 row-cols-sm-4 row-cols-md-6 row-cols-xl-8 g-2" id="destacadas"></div>
+        <p class="ml-empty d-none" id="sin-destacadas">Aún no hay calificaciones. Escribe reseñas con estrellas en la página de cada película.</p>
+      </section>
+
+      <section class="ml-section" id="favoritas" aria-labelledby="t-fav">
+        <h2 class="ml-eyebrow" id="t-fav">Favoritas</h2>
+        <div class="row row-cols-3 row-cols-sm-4 row-cols-md-6 row-cols-xl-8 g-2" id="favoritas-grid"></div>
+        <p class="ml-empty d-none" id="sin-favoritas">Todavía no tienes favoritas. Pulsa el corazón de cualquier póster.</p>
+      </section>
+    </div>
+  </main>
+
+  <footer class="ml-footer">
+    <div class="container">
+      <p class="mb-0">MyLetterboxd — proyecto académico inspirado en Letterboxd. Datos guardados solo en este navegador.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="JS/peliculas.js"></script>
+  <script src="JS/app.js"></script>
+</body>
+</html>

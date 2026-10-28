@@ -66,9 +66,9 @@ const TMDB = {
     lista.forEach((g) => GENEROS.set(g.id, g.name));
   },
 
-  // Listas de TMDB: "now_playing", "popular", "top_rated", "upcoming" o "trending".
+  // Listas de TMDB: "now_playing", "popular", "top_rated" o "upcoming".
   async lista(nombre) {
-    const data = nombre === "trending" ? await this.get("/trending/movie/week") : await this.get(`/movie/${nombre}`, { region: TMDB_REGION });
+    const data = await this.get(`/movie/${nombre}`, { region: TMDB_REGION });
     return data.results.map(desdeTMDB);
   },
 

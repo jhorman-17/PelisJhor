@@ -20,7 +20,7 @@ const CARRUSEL_IDS = [
 
 // Lo que se muestra en cada sección. El catálogo se carga por páginas desde TMDB.
 const catalogo = { lista: [], total: 0, pagina: 0, paginas: 0, cargando: false, error: false };
-const portada = { destacada: null, recientes: [], error: false };
+const cartelera = { lista: [], error: false };
 let favoritas = [], mejorCalificadas = [];
 let peticion = 0; // cada carga del catálogo tiene un número: se ignoran respuestas de búsquedas anteriores
 
@@ -109,42 +109,19 @@ function pintarCatalogo() {
   $("mas").textContent = cargando ? "Cargando…" : "Cargar más películas";
 }
 
-function pintarDestacada() {
-  const p = portada.destacada;
-  if (!p) {
-    $("destacada").innerHTML = `<p class="ml-meta mb-0">${portada.error ? ERROR_TMDB : "Cargando película destacada…"}</p>`;
-    return;
-  }
-  const fav = Almacen.esFavorita(p.id);
-  const meta = [p.anio, p.generos.join(" · "), `Dir. ${p.director ?? "No especificado"}`].filter(Boolean).join(" · ");
-  $("destacada").innerHTML = `<div class="row align-items-center g-4">
-    <div class="col-6 col-sm-4 col-md-3 mx-auto mx-md-0"><div class="poster-wrap">${posterHTML(p)}</div></div>
-    <div class="col-12 col-sm-8 col-md-9">
-      <p class="ml-eyebrow border-0 mb-1">Película destacada de la semana</p>
-      <h1 id="hero-titulo">${esc(p.titulo)}</h1>
-      <p class="ml-meta">${esc(meta)}</p>
-      <p class="sinopsis">${esc(p.sinopsis ?? "")}</p>
-      <a class="btn btn-acid me-2" href="pelicula.html?id=${p.id}">Ver detalle</a>
-      <button type="button" class="btn btn-ml-secondary${fav ? " active" : ""}" data-fav-id="${p.id}" aria-pressed="${fav}">${fav ? "♥ En favoritas" : "♡ Añadir a favoritas"}</button>
-    </div></div>`;
+function pintarCartelera() {
+  if (cartelera.error) $("recientes").innerHTML = `<p class="ml-meta">${ERROR_TMDB}</p>`;
+  else pintarLista("recientes", null, cartelera.lista);
 }
 
-function pintarPortada() {
-  pintarDestacada();
-  pintarLista("recientes", null, portada.recientes);
-}
-
-async function cargarPortada() {
+async function cargarCartelera() {
   try {
-    const [tendencias, enCines] = await Promise.all([TMDB.lista("trending"), TMDB.lista("now_playing")]);
-    const primera = tendencias.find(conPoster);
-    portada.destacada = primera ? await TMDB.pelicula(primera.id) : null;
-    portada.recientes = enCines.filter(conPoster).slice(0, 8);
+    cartelera.lista = (await TMDB.lista("now_playing")).filter(conPoster).slice(0, 8);
   } catch (err) {
-    portada.error = true;
-    console.error("TMDB: error cargando la portada", err);
+    cartelera.error = true;
+    console.error("TMDB: error cargando la cartelera", err);
   }
-  pintarPortada();
+  pintarCartelera();
 }
 
 function botonFavHTML(p) {
@@ -190,9 +167,9 @@ async function cargarCarrusel() {
     <button class="carousel-control-next" type="button" data-bs-target="#carrusel" data-bs-slide="next">
       <span class="carousel-control-next-icon" aria-hidden="true"></span><span class="visually-hidden">Siguiente</span>
     </button>`;
-  // Avanza solo cada 6 s (se detiene con el cursor encima), salvo que el usuario prefiera menos movimiento.
+  // Avanza solo cada 3 s (se detiene con el cursor encima), salvo que el usuario prefiera menos movimiento.
   const sinMovimiento = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  bootstrap.Carousel.getOrCreateInstance(cont, { interval: 6000, pause: "hover", ride: sinMovimiento ? false : "carousel" });
+  bootstrap.Carousel.getOrCreateInstance(cont, { interval: 3000, pause: "hover", ride: sinMovimiento ? false : "carousel" });
 }
 
 // En el carrusel solo se actualizan los botones: repintarlo lo devolvería a la primera diapositiva.
@@ -222,7 +199,7 @@ function pintarSeccionesPropias() {
 
 // Al marcar o quitar una favorita: se repinta lo que ya está cargado y se actualizan las favoritas.
 function alCambiarFavorita() {
-  pintarPortada();
+  pintarCartelera();
   marcarFavoritasCarrusel();
   pintarSeccionesPropias();
   if (estado.soloFav) cargarCatalogo();
@@ -310,9 +287,8 @@ async function iniciar() {
   try { await TMDB.cargarGeneros(); } catch (err) { console.error("TMDB: no se pudieron cargar los géneros", err); }
   iniciarControles();
   activarFavoritos(alCambiarFavorita);
-  pintarPortada();
-  cargarPortada();
   cargarCarrusel();
+  cargarCartelera();
   actualizarCatalogo();
   cargarSeccionesPropias();
 }

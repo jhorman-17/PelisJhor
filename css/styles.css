@@ -189,10 +189,7 @@ textarea.form-control { font-family: var(--ml-font-editorial); font-size: 16px; 
   color: var(--ml-text-2); transition: color var(--ml-ease);
 }
 .ml-back:hover { color: var(--ml-accent); }
-.ml-footer {
-  background: var(--ml-bg-raised); border-top: 1px solid var(--ml-border);
-  margin-top: 64px; padding: 32px 0; color: var(--ml-text-muted); font-size: 13px;
-}
+main { padding-bottom: 64px; } /* aire al final de la página */
 
 /* ---------- 6. Botones (se conservan los nombres de clase) ---------- */
 .btn-acid {
@@ -218,43 +215,7 @@ textarea.form-control { font-family: var(--ml-font-editorial); font-size: 16px; 
 }
 .btn-ml-secondary.btn-sm { --bs-btn-padding-y: 6px; --bs-btn-padding-x: 12px; --bs-btn-font-size: 13px; min-height: 38px; }
 
-/* ---------- 7. Hero (película destacada) ---------- */
-.hero {
-  position: relative; overflow: hidden; padding: 56px 0 40px;
-  background:
-    radial-gradient(700px 360px at 85% 10%, rgba(242, 180, 65, .14), transparent 70%),
-    radial-gradient(900px 500px at 0% 100%, rgba(32, 86, 102, .35), transparent 70%),
-    linear-gradient(180deg, var(--ml-bg-raised), var(--ml-bg));
-  border-bottom: 1px solid var(--ml-border);
-}
-.hero .ml-eyebrow {
-  display: inline-flex; align-items: center; gap: 12px; padding: 0; margin-bottom: 12px;
-  font-family: var(--ml-font-ui); font-size: 12px; font-weight: 700;
-  letter-spacing: .16em; text-transform: uppercase; color: var(--ml-accent);
-}
-.hero .ml-eyebrow::before { content: ""; width: 32px; height: 1px; background: var(--ml-accent); }
-.hero .ml-eyebrow::after { display: none; }
-.hero h1 {
-  font-family: var(--ml-font-editorial); font-weight: 700;
-  font-size: clamp(30px, 5.2vw, 52px); line-height: 1.12; letter-spacing: -.015em;
-  color: var(--ml-heading); margin-bottom: 14px;
-}
-.hero .ml-meta { font-size: 14px; margin-bottom: 18px; }
-.hero .sinopsis {
-  font-family: var(--ml-font-editorial); font-size: 17px; line-height: 1.7;
-  color: var(--ml-text); max-width: 62ch; margin-bottom: 24px;
-}
-.hero .btn { margin-bottom: 8px; }
-.hero .poster-wrap {
-  box-shadow: 0 0 0 1px var(--ml-border-strong), 0 18px 50px rgba(0, 0, 0, .55);
-  transition: transform 300ms ease;
-}
-@media (min-width: 768px) {
-  .hero .poster-wrap { transform: rotate(-1.5deg); }
-  .hero .poster-wrap:hover { transform: rotate(0deg); }
-}
-
-/* ---------- 8. Cuadrícula y tarjetas de películas ---------- */
+/* ---------- 7. Cuadrícula y tarjetas de películas ---------- */
 .row.g-2 { --bs-gutter-x: .875rem; --bs-gutter-y: 1.5rem; }
 
 /* Bootstrap 5.3 no incluye row-cols-xl-8: se define aquí (8 pósteres por fila desde 1200 px). */
@@ -341,7 +302,7 @@ textarea.form-control { font-family: var(--ml-font-editorial); font-size: 16px; 
 .fav-btn-lg:hover { background: var(--ml-surface-2); border-color: var(--ml-fav); color: var(--ml-heading); transform: none; -webkit-text-stroke: 0; }
 .fav-btn-lg.active { color: var(--ml-fav); background: var(--ml-fav-soft); border-color: var(--ml-fav); -webkit-text-stroke: 0; }
 
-/* ---------- 9. Estrellas (contorno = vacía, sólida = marcada) ---------- */
+/* ---------- 8. Estrellas (contorno = vacía, sólida = marcada) ---------- */
 .stars { display: inline-flex; gap: 2px; font-size: 17px; line-height: 1; letter-spacing: 0; white-space: nowrap; vertical-align: middle; }
 .star-on { color: var(--ml-accent); }
 .star-off { color: transparent; -webkit-text-stroke: 1px var(--ml-text-muted); }
@@ -360,7 +321,7 @@ textarea.form-control { font-family: var(--ml-font-editorial); font-size: 16px; 
 .star-input:has(button:hover) button:hover,
 .star-input:has(button:hover) button:has(~ button:hover) { color: var(--ml-accent); -webkit-text-stroke: 0; }
 
-/* ---------- 10. Detalle, reseñas y etiquetas ---------- */
+/* ---------- 9. Detalle, reseñas y etiquetas ---------- */
 .ml-card {
   background: var(--ml-surface); border: 1px solid var(--ml-border);
   border-radius: var(--ml-radius-lg); padding: 20px;
@@ -392,7 +353,7 @@ textarea.form-control { font-family: var(--ml-font-editorial); font-size: 16px; 
 #detalle .poster-wrap { box-shadow: 0 0 0 1px var(--ml-border-strong), 0 18px 40px rgba(0, 0, 0, .5); }
 #media .stars { font-size: 20px; }
 
-/* ---------- 11. Carrusel "Las más populares" ---------- */
+/* ---------- 10. Carrusel "Las más populares" ---------- */
 .carrusel {
   overflow: hidden; background: var(--ml-surface); border-radius: var(--ml-radius-lg);
   box-shadow: 0 0 0 1px var(--ml-border), 0 18px 50px rgba(0, 0, 0, .45);
@@ -444,7 +405,7 @@ textarea.form-control { font-family: var(--ml-font-editorial); font-size: 16px; 
   .carrusel .carousel-control-prev, .carrusel .carousel-control-next { width: 40px; }
 }
 
-/* ---------- 12. Movimiento reducido ---------- */
+/* ---------- 11. Movimiento reducido ---------- */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
   .poster-card:hover .poster-wrap, .poster-card:has(:focus-visible) .poster-wrap,

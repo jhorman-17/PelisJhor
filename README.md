@@ -10,7 +10,7 @@ HTML5 semántico, CSS3 (variables `--ml-*` en `:root`), Bootstrap 5.3.3 (CDN: gr
 ## Estructura
 ```
 MyLetterboxd/
-├── index.html        Inicio: destacada, carrusel de populares, en cartelera, catálogo, mejor calificadas y favoritas
+├── index.html        Inicio: carrusel de populares, en cartelera, catálogo, mejor calificadas y favoritas
 ├── pelicula.html     Plantilla única de detalle (?id=...) con reseñas
 ├── css/styles.css    Estilos propios (identidad "Sala oscura")
 ├── js/peliculas.js   Utilidades compartidas (Almacen, tarjetas, favoritas)
@@ -32,7 +32,6 @@ No hay una lista de películas en el proyecto: todo sale de la API de TMDB con e
 
 | Sección | Petición a TMDB |
 |---|---|
-| Película destacada | `/trending/movie/week` (la primera) y su ficha completa |
 | Carrusel «Las más populares» | `/movie/{id}` de cada película de `CARRUSEL_IDS` (en `app.js`) |
 | En cartelera | `/movie/now_playing` (región Colombia) |
 | Catálogo con filtros | `/discover/movie` |
@@ -40,7 +39,7 @@ No hay una lista de películas en el proyecto: todo sale de la API de TMDB con e
 | Ficha, favoritas y reseñadas | `/movie/{id}` con director y reparto |
 | Lista de géneros | `/genre/movie/list` (se guarda 7 días en `localStorage`) |
 
-El carrusel usa el componente Carousel de Bootstrap: imagen de fondo de la película, póster, sinopsis y botones; avanza solo cada 6 s (se pausa con el cursor encima y no se mueve solo si el sistema pide menos movimiento). Para cambiar sus películas, edita `CARRUSEL_IDS` con el número que aparece en la URL de cada película en themoviedb.org.
+El carrusel usa el componente Carousel de Bootstrap: imagen de fondo de la película, póster, sinopsis y botones; avanza solo cada 3 s (se pausa con el cursor encima y no se mueve solo si el sistema pide menos movimiento). Para cambiar sus películas, edita `CARRUSEL_IDS` con el número que aparece en la URL de cada película en themoviedb.org.
 
 Cada película se identifica por su id de TMDB (`pelicula.html?id=693134`). Las respuestas se guardan en memoria mientras la página está abierta para no repetir peticiones. Las películas sin póster no se muestran en las listas.
 
@@ -55,7 +54,7 @@ Los filtros se reflejan en la URL (`index.html?genero=18&orden=calificacion`), a
 
 ## Reseñas y favoritas
 - **Reseñas:** formulario en la ficha (nombre, texto y de 1 a 5 estrellas). La media de tus reseñas alimenta «Mejor calificadas». El texto se escapa antes de mostrarse (no se inyecta HTML).
-- **Favoritas:** botón ♥ en cada póster, en la película destacada y en la ficha. Se listan en la sección «Favoritas» del inicio.
+- **Favoritas:** botón ♥ en cada póster, en el carrusel y en la ficha. Se listan en la sección «Favoritas» del inicio.
 - Todo se guarda en `localStorage` con las claves `ml_resenas` y `ml_favoritos`, usando el id de TMDB; los datos se validan al leerlos. Las favoritas, reseñas y enlaces de la versión anterior (ids como `dune-part-two`) se convierten solos a ids de TMDB (`IDS_ANTIGUOS` en `peliculas.js`). Para borrarlos, limpia los datos del sitio en el navegador.
 
 ## Cómo carga el detalle
@@ -73,7 +72,7 @@ Este producto usa la API de TMDB, pero no está respaldado ni certificado por TM
 - **Asincronía y APIs:** `fetch`, `async`/`await` y `Promise.all` para pedir datos a TMDB sin bloquear la página.
 - **Semántica:** `header`, `nav`, `main`, `section`, `article`, `footer`, `dl` para los datos de la ficha, encabezados jerárquicos y `label` para cada campo.
 - **Bootstrap Grid:** `.row-cols-3 .row-cols-sm-4 .row-cols-md-6 .row-cols-xl-8` en los pósteres (3 columnas en móvil, 4 desde 576 px, 6 desde 768 px, 8 desde 1200 px; `row-cols-xl-8` se define en `styles.css` porque Bootstrap solo llega a 6).
-- **Responsive:** breakpoints de Bootstrap, `clamp()` en los títulos y `@media` propios para la navegación y el póster del hero.
+- **Responsive:** breakpoints de Bootstrap, `clamp()` en los títulos y `@media` propios para la navegación y el carrusel.
 - **Accesibilidad:** `aria-pressed` en favoritas y estrellas, `aria-live` en el contador, foco visible y `prefers-reduced-motion`.
 
 ## Limitaciones

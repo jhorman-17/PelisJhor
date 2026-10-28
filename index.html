@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&amp;family=Lora:wght@400;700&amp;display=swap" rel="stylesheet">
-  <link href="CSS/styles.css" rel="stylesheet">
+  <link href="css/styles.css" rel="stylesheet">
 </head>
 <body id="inicio">
   <header>
@@ -39,8 +39,15 @@
     </section>
 
     <div class="container">
+      <section class="ml-section" aria-labelledby="t-populares">
+        <h2 class="ml-eyebrow" id="t-populares">Las más populares</h2>
+        <div id="carrusel" class="carousel slide carrusel" aria-roledescription="carrusel">
+          <p class="ml-meta p-4 mb-0">Cargando películas…</p>
+        </div>
+      </section>
+
       <section class="ml-section" aria-labelledby="t-recientes">
-        <h2 class="ml-eyebrow" id="t-recientes">Películas recientes</h2>
+        <h2 class="ml-eyebrow" id="t-recientes">En cartelera</h2>
         <div class="row row-cols-3 row-cols-sm-4 row-cols-md-6 row-cols-xl-8 g-2" id="recientes"></div>
       </section>
 
@@ -65,7 +72,7 @@
           <div class="col-6 col-sm-3 col-md-2">
             <label class="form-label ml-label" for="f-orden">Ordenar por</label>
             <select class="form-select form-select-sm" id="f-orden">
-              <option value="fecha">Fecha de estreno</option><option value="anio">Año</option><option value="calificacion">Calificación</option>
+              <option value="popularidad">Popularidad</option><option value="fecha">Fecha de estreno</option><option value="calificacion">Calificación</option>
             </select>
           </div>
           <div class="col-6 col-sm-6 col-md-2">
@@ -81,6 +88,7 @@
         <p class="ml-meta" id="contador" aria-live="polite"></p>
         <div class="row row-cols-3 row-cols-sm-4 row-cols-md-6 row-cols-xl-8 g-2" id="grid"></div>
         <p class="ml-empty d-none" id="sin-resultados">No hay películas que coincidan con la búsqueda o los filtros.</p>
+        <div class="text-center mt-4"><button type="button" class="btn btn-ml-secondary d-none" id="mas">Cargar más películas</button></div>
       </section>
 
       <section class="ml-section" aria-labelledby="t-destacadas">
@@ -99,12 +107,14 @@
 
   <footer class="ml-footer">
     <div class="container">
-      <p class="mb-0">MyLetterboxd — proyecto académico inspirado en Letterboxd. Datos guardados solo en este navegador.</p>
+      <p class="mb-0">MyLetterboxd — proyecto académico inspirado en Letterboxd. Datos guardados solo en este navegador. Pósteres de <a href="https://www.themoviedb.org/" target="_blank" rel="noopener">TMDB</a>; este producto usa la API de TMDB, pero no está respaldado ni certificado por TMDB.</p>
     </div>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="JS/peliculas.js"></script>
-  <script src="JS/app.js"></script>
+  <script src="js/peliculas.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/tmdb.js"></script>
+  <script src="js/app.js"></script>
 </body>
 </html>

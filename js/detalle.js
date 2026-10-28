@@ -1,8 +1,17 @@
-/* Página de detalle. Requiere peliculas.js (catálogo, Almacen, utilidades). */
+/* Página de detalle: ficha de TMDB + reseñas. Requiere peliculas.js y tmdb.js. */
 const cont = document.getElementById("detalle");
-const id = new URLSearchParams(location.search).get("id");
-const pelicula = id ? buscarPelicula(id) : null;
+const param = new URLSearchParams(location.search).get("id") ?? "";
+// Acepta el id de TMDB (?id=693134) y los enlaces antiguos (?id=dune-part-two).
+const id = IDS_ANTIGUOS[param] ?? (/^\d+$/.test(param) ? Number(param) : null);
+let pelicula = null;
 const ND = "No especificado";
+const fechaLarga = (f) => new Date(`${f}T00:00:00`).toLocaleDateString("es", { day: "numeric", month: "long", year: "numeric" });
+
+// "Volver al catálogo" conserva los últimos filtros usados en el inicio (los guarda app.js).
+try {
+  const filtros = sessionStorage.getItem("ml_filtros");
+  if (filtros) document.getElementById("volver").href = `index.html?${filtros}#catalogo`;
+} catch { /* almacenamiento no disponible: se mantiene index.html#catalogo */ }
 
 function pintarResenas() {
   const lista = Almacen.resenas(pelicula.id);
@@ -45,11 +54,7 @@ function iniciarFormulario() {
   });
 }
 
-if (!pelicula) {
-  document.title = "Película no encontrada — MyLetterboxd";
-  cont.innerHTML = `<div class="ml-empty"><h1 class="h4">Película no encontrada</h1>
-    <p>No existe una película con el identificador solicitado.</p><a class="btn btn-acid" href="index.html">Volver al inicio</a></div>`;
-} else {
+function pintarDetalle() {
   document.title = `${pelicula.titulo} — MyLetterboxd`;
   cont.innerHTML = `<article><div class="row g-4">
     <div class="col-6 col-sm-4 col-md-3 mx-auto mx-sm-0"><div class="poster-wrap">${posterHTML(pelicula)}</div></div>
@@ -58,11 +63,12 @@ if (!pelicula) {
       <div class="mb-3" id="media"></div>
       <p class="review-text">${esc(pelicula.sinopsis ?? "Sinopsis: " + ND)}</p>
       <dl class="detalle-datos row mt-3">
-        <div class="col-6 col-md-4"><dt>Estreno</dt><dd>${esc(pelicula.fechaEstreno ?? ND)}</dd></div>
+        <div class="col-6 col-md-4"><dt>Estreno</dt><dd>${esc(pelicula.fechaEstreno ? fechaLarga(pelicula.fechaEstreno) : ND)}</dd></div>
         <div class="col-6 col-md-4"><dt>Duración</dt><dd>${esc(pelicula.duracion ?? ND)}</dd></div>
         <div class="col-12 col-md-4"><dt>Director</dt><dd>${esc(pelicula.director ?? ND)}</dd></div>
         <div class="col-12 col-md-6"><dt>Géneros</dt><dd>${pelicula.generos.length ? pelicula.generos.map((g) => `<span class="badge-ml me-1">${esc(g)}</span>`).join("") : ND}</dd></div>
         <div class="col-12 col-md-6"><dt>Actores principales</dt><dd>${esc(pelicula.actores ? pelicula.actores.join(", ") : ND)}</dd></div>
+        <div class="col-12 col-md-6"><dt>Calificación en TMDB</dt><dd>${pelicula.voto !== null ? `${estrellasHTML(pelicula.voto)} ${pelicula.voto.toFixed(1)} · ${pelicula.votos.toLocaleString("es")} votos` : ND}</dd></div>
       </dl>
       <button type="button" class="btn fav-btn fav-btn-lg" id="btn-fav"></button>
     </div></div></article>
@@ -89,3 +95,26 @@ if (!pelicula) {
   iniciarFormulario();
   activarFavoritos(pintarFavorito);
 }
+
+function pintarNoEncontrada() {
+  document.title = "Película no encontrada — MyLetterboxd";
+  cont.innerHTML = `<div class="ml-empty"><h1 class="h4">Película no encontrada</h1>
+    <p>No existe una película con el identificador solicitado.</p><a class="btn btn-acid" href="index.html">Volver al inicio</a></div>`;
+}
+
+async function iniciar() {
+  if (!id) return pintarNoEncontrada();
+  cont.innerHTML = `<p class="ml-meta">Cargando película…</p>`;
+  try {
+    pelicula = await TMDB.pelicula(id);
+  } catch (err) {
+    if (err.status === 404) return pintarNoEncontrada();
+    console.error("TMDB: error cargando la película", err);
+    cont.innerHTML = `<div class="ml-empty"><h1 class="h4">No se pudo cargar la película</h1>
+      <p>No se pudo conectar con TMDB. Revisa tu conexión a internet y recarga la página.</p></div>`;
+    return;
+  }
+  pintarDetalle();
+}
+
+iniciar();

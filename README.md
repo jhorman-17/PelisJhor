@@ -1,4 +1,4 @@
-# MyLetterboxd
+# PelisJhor
 
 Sitio de reseñas cinematográficas (proyecto universitario) inspirado en la experiencia de catálogo de Letterboxd. Proyecto educativo independiente, sin afiliación con ninguna plataforma.
 
@@ -9,7 +9,7 @@ HTML5 semántico, CSS3 (variables `--ml-*` en `:root`), Bootstrap 5.3.3 (CDN: gr
 
 ## Estructura
 ```
-MyLetterboxd/
+PelisJhor/
 ├── index.html        Inicio: carrusel de populares, en cartelera, catálogo, mejor calificadas y favoritas
 ├── pelicula.html     Plantilla única de detalle (?id=...) con reseñas
 ├── css/styles.css    Estilos propios (identidad "Sala oscura")
@@ -23,7 +23,7 @@ MyLetterboxd/
 El orden de carga importa: `peliculas.js`, `config.js` y `tmdb.js` siempre antes de `app.js` o `detalle.js`.
 
 ## Ejecutar en Visual Studio Code
-1. Abre la carpeta `MyLetterboxd` en VS Code.
+1. Abre la carpeta `PelisJhor` en VS Code.
 2. Opción simple: doble clic en `index.html`. Opción recomendada: extensión **Live Server**, clic derecho en `index.html` → *Open with Live Server*.
 3. Necesitas internet para cargar Bootstrap, las fuentes y las películas de TMDB.
 

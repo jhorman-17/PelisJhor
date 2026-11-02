@@ -55,7 +55,7 @@ function iniciarFormulario() {
 }
 
 function pintarDetalle() {
-  document.title = `${pelicula.titulo} — MyLetterboxd`;
+  document.title = `${pelicula.titulo} — PelisJhor`;
   cont.innerHTML = `<article><div class="row g-4">
     <div class="col-6 col-sm-4 col-md-3 mx-auto mx-sm-0"><div class="poster-wrap">${posterHTML(pelicula)}</div></div>
     <div class="col-12 col-sm-8 col-md-9">
@@ -97,7 +97,7 @@ function pintarDetalle() {
 }
 
 function pintarNoEncontrada() {
-  document.title = "Película no encontrada — MyLetterboxd";
+  document.title = "Película no encontrada — PelisJhor";
   cont.innerHTML = `<div class="ml-empty"><h1 class="h4">Película no encontrada</h1>
     <p>No existe una película con el identificador solicitado.</p><a class="btn btn-acid" href="index.html">Volver al inicio</a></div>`;
 }

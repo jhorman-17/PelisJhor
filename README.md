@@ -1,82 +1,116 @@
 # PelisJhor
 
-Sitio de reseñas cinematográficas (proyecto universitario) inspirado en la experiencia de catálogo de Letterboxd. Proyecto educativo independiente, sin afiliación con ninguna plataforma.
+Sitio web para explorar películas, escribir reseñas y guardar favoritas. Es un proyecto universitario inspirado en Letterboxd; no tiene relación con esa plataforma.
 
-Permite explorar todo el catálogo de películas de [TMDB](https://www.themoviedb.org/), buscar, filtrar y ordenar, ver la ficha de cada película, escribir reseñas con estrellas y guardar favoritas. Reseñas y favoritas se guardan solo en el navegador (`localStorage`).
+Las películas se obtienen de la API de [TMDB](https://www.themoviedb.org/). Las reseñas y las favoritas se guardan en el navegador con `localStorage`.
 
 ## Tecnologías
-HTML5 semántico, CSS3 (variables `--ml-*` en `:root`), Bootstrap 5.3.3 (CDN: grilla, navbar y formularios), JavaScript puro con scripts clásicos (sin módulos, sin servidor) y la API de TMDB (`fetch`).
+
+- HTML5
+- Sass (SCSS), compilado a CSS
+- Bootstrap 5.3.3 desde CDN (grilla, barra de navegación, formularios y carrusel)
+- JavaScript sin frameworks
+- API de TMDB con `fetch`
 
 ## Estructura
+
 ```
 PelisJhor/
-├── index.html        Inicio: carrusel de populares, en cartelera, catálogo, mejor calificadas y favoritas
-├── pelicula.html     Plantilla única de detalle (?id=...) con reseñas
-├── css/styles.css    Estilos propios (identidad "Sala oscura")
-├── js/peliculas.js   Utilidades compartidas (Almacen, tarjetas, favoritas)
-├── js/config.js      Token de lectura de la API de TMDB
-├── js/tmdb.js        Conexión con TMDB: catálogo, búsqueda, géneros y fichas
-├── js/app.js         Inicio: búsqueda, filtros, orden y secciones
-├── js/detalle.js     Ficha individual, reseñas y película no encontrada
-└── README.md
+├── index.html         Página de inicio
+├── pelicula.html      Ficha de una película (pelicula.html?id=...)
+├── scss/styles.scss   Estilos en Sass (este es el archivo que se edita)
+├── css/styles.css     CSS compilado desde scss/styles.scss
+├── js/utilidades.js   Funciones compartidas: localStorage, tarjetas, favoritas
+├── js/config.js       Token de la API de TMDB
+├── js/tmdb.js         Peticiones a TMDB
+├── js/app.js          Lógica de la página de inicio
+├── js/detalle.js      Lógica de la ficha y las reseñas
+└── package.json       Compilador de Sass
 ```
-El orden de carga importa: `peliculas.js`, `config.js` y `tmdb.js` siempre antes de `app.js` o `detalle.js`.
 
-## Ejecutar en Visual Studio Code
-1. Abre la carpeta `PelisJhor` en VS Code.
-2. Opción simple: doble clic en `index.html`. Opción recomendada: extensión **Live Server**, clic derecho en `index.html` → *Open with Live Server*.
-3. Necesitas internet para cargar Bootstrap, las fuentes y las películas de TMDB.
+Los scripts se cargan en este orden: `utilidades.js`, `config.js`, `tmdb.js` y luego `app.js` o `detalle.js`.
 
-## Películas desde TMDB
-No hay una lista de películas en el proyecto: todo sale de la API de TMDB con el token de `js/config.js` (de solo lectura, en <https://www.themoviedb.org/settings/api>). `tmdb.js` pide los datos en español y los convierte al formato de la web (`desdeTMDB`):
+## Cómo ejecutarlo
 
-| Sección | Petición a TMDB |
+1. Abrir la carpeta en Visual Studio Code.
+2. Abrir `index.html` en el navegador, o usar la extensión Live Server (clic derecho en `index.html` → *Open with Live Server*).
+3. Se necesita internet para cargar Bootstrap, las fuentes y las películas.
+
+## Compilar los estilos con Sass
+
+`css/styles.css` ya está compilado, así que la página funciona sin instalar nada. Solo hay que compilar al cambiar algo en `scss/styles.scss`:
+
+```
+npm install          (solo la primera vez, requiere Node.js)
+npm run sass         compila una vez
+npm run sass:watch   recompila cada vez que se guarda el archivo
+```
+
+`css/styles.css` no se edita a mano porque se sobrescribe al compilar.
+
+### Variables
+
+Están al inicio de `scss/styles.scss`: colores (`$fondo`, `$acento`, `$favorita`…), fuentes (`$fuente-ui`, `$fuente-editorial`), bordes y transiciones (`$radio`, `$radio-lg`, `$transicion`) y puntos de quiebre (`$bp-sm`, `$bp-md`, `$bp-lg`, `$bp-xl`). Por ejemplo:
+
+```scss
+$acento: #f2b441;
+.pj-nav { background: rgba($fondo, .86); }
+@media (max-width: $bp-md - .02px) { ... }   // 767.98px
+```
+
+### Anidación
+
+Cada componente agrupa sus reglas, y `&` se usa para estados y pseudoelementos:
+
+```scss
+.pj-logo {
+  display: inline-flex;
+  &::before { ... }          // .pj-logo::before
+  &:hover, &:focus { ... }   // .pj-logo:hover, .pj-logo:focus
+}
+```
+
+También están anidados `.pj-nav`, `.poster-card`, `.star-input`, `.carrusel` y `#detalle`, incluidos sus `@media`.
+
+### Interpolación
+
+1. En las variables CSS. Sass no evalúa el valor de una propiedad personalizada, así que la variable se inserta con `#{}`:
+   ```scss
+   --pj-accent: #{$acento};   // --pj-accent: #f2b441;
+   ```
+2. En el nombre de una clase. Bootstrap solo trae `row-cols` hasta 6, y la clase para 8 columnas se genera así:
+   ```scss
+   .row-cols-xl-#{$columnas-xl} > * { width: math.div(100%, $columnas-xl); }
+   // con $columnas-xl: 8 → .row-cols-xl-8 > * { width: 12.5%; }
+   ```
+
+Además hay una función propia, `canales-rgb()`, que convierte un color al formato `r, g, b` que usan algunas variables de Bootstrap.
+
+## Funcionalidades
+
+- **Inicio:** carrusel con películas elegidas (`CARRUSEL_IDS` en `app.js`), películas en cartelera en Colombia, catálogo, mejor calificadas y favoritas.
+- **Catálogo:** búsqueda por título y filtros por género, año, calificación mínima y orden. Las películas se cargan por páginas con el botón "Cargar más películas". Los filtros quedan en la URL, por ejemplo `index.html?genero=18&orden=calificacion`.
+- **Ficha:** sinopsis, estreno, duración, director, géneros, actores y calificación de TMDB.
+- **Reseñas:** nombre, texto y de 1 a 5 estrellas. La sección "Mejor calificadas" usa el promedio de estas reseñas.
+- **Favoritas:** botón ♥ en cada póster, en el carrusel y en la ficha.
+
+### Peticiones a TMDB
+
+| Sección | Endpoint |
 |---|---|
-| Carrusel «Las más populares» | `/movie/{id}` de cada película de `CARRUSEL_IDS` (en `app.js`) |
-| En cartelera | `/movie/now_playing` (región Colombia) |
+| Carrusel y ficha | `/movie/{id}` |
+| En cartelera | `/movie/now_playing` |
 | Catálogo con filtros | `/discover/movie` |
-| Búsqueda por texto | `/search/movie` |
-| Ficha, favoritas y reseñadas | `/movie/{id}` con director y reparto |
-| Lista de géneros | `/genre/movie/list` (se guarda 7 días en `localStorage`) |
+| Búsqueda | `/search/movie` |
+| Géneros | `/genre/movie/list` (se guarda 7 días en `localStorage`) |
 
-El carrusel usa el componente Carousel de Bootstrap: imagen de fondo de la película, póster, sinopsis y botones; avanza solo cada 3 s (se pausa con el cursor encima y no se mueve solo si el sistema pide menos movimiento). Para cambiar sus películas, edita `CARRUSEL_IDS` con el número que aparece en la URL de cada película en themoviedb.org.
+## Créditos
 
-Cada película se identifica por su id de TMDB (`pelicula.html?id=693134`). Las respuestas se guardan en memoria mientras la página está abierta para no repetir peticiones. Las películas sin póster no se muestran en las listas.
-
-## Búsqueda, filtros y orden
-`app.js` mantiene un único objeto `estado` (texto, género, año, calificación mínima, orden y «solo favoritas»). Cada control lo modifica y vuelve a pedir el catálogo a TMDB, de 20 en 20 películas con el botón «Cargar más películas». La búsqueda espera a que se deje de escribir (400 ms) para no hacer una petición por tecla, y se ignoran las respuestas de búsquedas anteriores.
-
-- Sin texto, género, año, calificación y orden los aplica TMDB (`/discover`). La calificación mínima usa la nota de TMDB pasada a 5 estrellas; el orden por calificación exige al menos 300 votos para evitar películas con un solo voto.
-- Con texto, TMDB busca por título (y año); el género y la calificación se filtran sobre los resultados.
-- «Solo favoritas» muestra tus favoritas con los mismos filtros.
-
-Los filtros se reflejan en la URL (`index.html?genero=18&orden=calificacion`), así que se pueden compartir o recargar. «Volver al catálogo» en la ficha regresa con los últimos filtros usados. Los valores inválidos en la URL se ignoran.
-
-## Reseñas y favoritas
-- **Reseñas:** formulario en la ficha (nombre, texto y de 1 a 5 estrellas). La media de tus reseñas alimenta «Mejor calificadas». El texto se escapa antes de mostrarse (no se inyecta HTML).
-- **Favoritas:** botón ♥ en cada póster, en el carrusel y en la ficha. Se listan en la sección «Favoritas» del inicio.
-- Todo se guarda en `localStorage` con las claves `ml_resenas` y `ml_favoritos`, usando el id de TMDB; los datos se validan al leerlos. Las favoritas, reseñas y enlaces de la versión anterior (ids como `dune-part-two`) se convierten solos a ids de TMDB (`IDS_ANTIGUOS` en `peliculas.js`). Para borrarlos, limpia los datos del sitio en el navegador.
-
-## Cómo carga el detalle
-Cada tarjeta enlaza a `pelicula.html?id=693134`. `detalle.js` lee el parámetro con `URLSearchParams`, pide la ficha a TMDB y la pinta: estreno, duración, director, géneros, actores principales y calificación de TMDB. Si el id falta o TMDB no lo encuentra, muestra «Película no encontrada» con enlace al inicio; si no hay conexión, lo indica.
-
-## Imágenes y créditos
-Pósteres y datos de [TMDB](https://www.themoviedb.org/) (© de sus respectivos estudios, uso académico sin fines de lucro). Si un póster no carga, en su lugar aparece un recuadro «Imagen no encontrada» con la ruta que falló.
-
-Este producto usa la API de TMDB, pero no está respaldado ni certificado por TMDB.
-
-## Conceptos académicos aplicados
-- **Modelo de caja:** `box-sizing: border-box` (Bootstrap), `padding` y `border` en tarjetas y controles, `aspect-ratio: 2 / 3` en los pósteres.
-- **Selectores:** etiqueta (`a`, `h1`), clase (`.poster-title`), id (`#detalle`), atributo (`[data-bs-theme="dark"]`), estado (`:hover`, `:focus-visible`) y relacional (`:has()`).
-- **DOM y CSSOM:** el navegador convierte el HTML en el DOM y el CSS en el CSSOM; combinados forman el árbol de renderizado. JavaScript modifica el DOM (`innerHTML`, `getElementById`, `classList`) y el navegador recalcula el resultado.
-- **Asincronía y APIs:** `fetch`, `async`/`await` y `Promise.all` para pedir datos a TMDB sin bloquear la página.
-- **Semántica:** `header`, `nav`, `main`, `section`, `article`, `footer`, `dl` para los datos de la ficha, encabezados jerárquicos y `label` para cada campo.
-- **Bootstrap Grid:** `.row-cols-3 .row-cols-sm-4 .row-cols-md-6 .row-cols-xl-8` en los pósteres (3 columnas en móvil, 4 desde 576 px, 6 desde 768 px, 8 desde 1200 px; `row-cols-xl-8` se define en `styles.css` porque Bootstrap solo llega a 6).
-- **Responsive:** breakpoints de Bootstrap, `clamp()` en los títulos y `@media` propios para la navegación y el carrusel.
-- **Accesibilidad:** `aria-pressed` en favoritas y estrellas, `aria-live` en el contador, foco visible y `prefers-reduced-motion`.
+Datos e imágenes de [TMDB](https://www.themoviedb.org/), con fines académicos. Este proyecto usa la API de TMDB, pero no está respaldado ni certificado por TMDB.
 
 ## Limitaciones
-- Sin conexión a internet no se muestran películas.
-- El catálogo de TMDB permite recorrer como máximo 500 páginas (10.000 películas) por búsqueda o filtro.
-- Algunas películas no tienen sinopsis en español; su ficha muestra «No especificado».
-- Los datos propios viven en un solo navegador: no hay cuentas ni servidor.
+
+- Sin internet no se muestran películas.
+- TMDB solo permite recorrer 500 páginas de resultados por búsqueda.
+- Algunas películas no tienen sinopsis en español.
+- Las reseñas y favoritas solo existen en el navegador donde se crearon.

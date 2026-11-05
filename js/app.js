@@ -1,12 +1,11 @@
-/* Página inicial: catálogo de TMDB, búsqueda, filtros, orden y favoritas. Requiere peliculas.js y tmdb.js */
-const $ = (id) => document.getElementById(id);
+// Página de inicio: carrusel, cartelera, catálogo con filtros, mejor calificadas y favoritas.
+
 const INICIAL = { texto: "", genero: "", anio: "", min: 0, orden: "popularidad", soloFav: false };
 const estado = { ...INICIAL };
 const HOY = new Date().toISOString().slice(0, 10);
 const ERROR_TMDB = "No se pudo conectar con TMDB. Revisa tu conexión a internet.";
 
-// Carrusel "Las más populares": películas elegidas a mano por su id de TMDB.
-// Para cambiarlas, busca la película en themoviedb.org y copia el número de su URL.
+// Películas del carrusel. El id es el número que aparece en la URL de la película en themoviedb.org.
 const CARRUSEL_IDS = [
   313369,  // La La Land
   1368337, // La Odisea (The Odyssey)
@@ -18,17 +17,15 @@ const CARRUSEL_IDS = [
   1317288  // Marty Supreme
 ];
 
-// Lo que se muestra en cada sección. El catálogo se carga por páginas desde TMDB.
 const catalogo = { lista: [], total: 0, pagina: 0, paginas: 0, cargando: false, error: false };
 const cartelera = { lista: [], error: false };
 let favoritas = [], mejorCalificadas = [];
-let peticion = 0; // cada carga del catálogo tiene un número: se ignoran respuestas de búsquedas anteriores
+let peticion = 0; // para descartar respuestas de búsquedas anteriores
 
-// Normaliza para buscar: sin tildes, en minúsculas y sin espacios sobrantes.
+// Quita tildes, mayúsculas y espacios de más para comparar textos.
 const normalizar = (s) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/\s+/g, " ").trim();
 const conPoster = (p) => p.poster;
 
-// Clave de fecha: usa fechaEstreno si existe. Sin dato → 0 (queda al final).
 const claveFecha = (p) => (p.fechaEstreno ? Date.parse(p.fechaEstreno) : 0);
 const ORDEN_LOCAL = {
   popularidad: (a, b) => b.popularidad - a.popularidad,
@@ -36,7 +33,7 @@ const ORDEN_LOCAL = {
   calificacion: (a, b) => (b.voto ?? -1) - (a.voto ?? -1)
 };
 
-// Parámetros para /discover de TMDB según los filtros elegidos.
+// Parámetros de TMDB según los filtros elegidos.
 function paramsTMDB() {
   const texto = estado.texto.trim();
   if (texto) return estado.anio ? { query: texto, primary_release_year: estado.anio } : { query: texto };
@@ -110,7 +107,7 @@ function pintarCatalogo() {
 }
 
 function pintarCartelera() {
-  if (cartelera.error) $("recientes").innerHTML = `<p class="ml-meta">${ERROR_TMDB}</p>`;
+  if (cartelera.error) $("recientes").innerHTML = `<p class="pj-meta">${ERROR_TMDB}</p>`;
   else pintarLista("recientes", null, cartelera.lista);
 }
 
@@ -126,7 +123,7 @@ async function cargarCartelera() {
 
 function botonFavHTML(p) {
   const fav = Almacen.esFavorita(p.id);
-  return `<button type="button" class="btn btn-ml-secondary${fav ? " active" : ""}" data-fav-id="${p.id}" aria-pressed="${fav}">${fav ? "♥ En favoritas" : "♡ Añadir a favoritas"}</button>`;
+  return `<button type="button" class="btn btn-pj-secondary${fav ? " active" : ""}" data-fav-id="${p.id}" aria-pressed="${fav}">${fav ? "♥ En favoritas" : "♡ Añadir a favoritas"}</button>`;
 }
 
 function diapositivaHTML(p, i, total) {
@@ -139,9 +136,9 @@ function diapositivaHTML(p, i, total) {
         <div class="carrusel-texto">
           <p class="carrusel-numero">${String(i + 1).padStart(2, "0")} / ${String(total).padStart(2, "0")}</p>
           <h3>${esc(p.titulo)}</h3>
-          <p class="ml-meta">${esc(meta)}</p>
+          <p class="pj-meta">${esc(meta)}</p>
           <p class="carrusel-sinopsis">${esc(p.sinopsis ?? "")}</p>
-          <a class="btn btn-acid me-2" href="pelicula.html?id=${p.id}">Ver detalle</a>
+          <a class="btn btn-pj-primary me-2" href="pelicula.html?id=${p.id}">Ver detalle</a>
           ${botonFavHTML(p)}
         </div>
       </div>
@@ -153,7 +150,7 @@ async function cargarCarrusel() {
   const cont = $("carrusel");
   const peliculas = await TMDB.peliculas(CARRUSEL_IDS);
   if (!peliculas.length) {
-    cont.innerHTML = `<p class="ml-meta p-4 mb-0">${ERROR_TMDB}</p>`;
+    cont.innerHTML = `<p class="pj-meta p-4 mb-0">${ERROR_TMDB}</p>`;
     return;
   }
   const n = peliculas.length;
@@ -167,12 +164,12 @@ async function cargarCarrusel() {
     <button class="carousel-control-next" type="button" data-bs-target="#carrusel" data-bs-slide="next">
       <span class="carousel-control-next-icon" aria-hidden="true"></span><span class="visually-hidden">Siguiente</span>
     </button>`;
-  // Avanza solo cada 3 s (se detiene con el cursor encima), salvo que el usuario prefiera menos movimiento.
+  // Cambia cada 3 s, salvo que el sistema pida reducir el movimiento.
   const sinMovimiento = matchMedia("(prefers-reduced-motion: reduce)").matches;
   bootstrap.Carousel.getOrCreateInstance(cont, { interval: 3000, pause: "hover", ride: sinMovimiento ? false : "carousel" });
 }
 
-// En el carrusel solo se actualizan los botones: repintarlo lo devolvería a la primera diapositiva.
+// Solo se actualizan los botones: repintar el carrusel lo regresaría a la primera diapositiva.
 function marcarFavoritasCarrusel() {
   document.querySelectorAll("#carrusel .carrusel-texto [data-fav-id]").forEach((b) => {
     const fav = Almacen.esFavorita(Number(b.dataset.favId));
@@ -182,7 +179,6 @@ function marcarFavoritasCarrusel() {
   });
 }
 
-// Favoritas y mejor calificadas dependen de lo guardado en este navegador.
 async function cargarSeccionesPropias() {
   [favoritas, mejorCalificadas] = await Promise.all([
     TMDB.peliculas(Almacen.favoritos()),
@@ -197,7 +193,6 @@ function pintarSeccionesPropias() {
   pintarLista("favoritas-grid", "sin-favoritas", favoritas.filter((p) => Almacen.esFavorita(p.id)));
 }
 
-// Al marcar o quitar una favorita: se repinta lo que ya está cargado y se actualizan las favoritas.
 function alCambiarFavorita() {
   pintarCartelera();
   marcarFavoritasCarrusel();
@@ -207,7 +202,7 @@ function alCambiarFavorita() {
   cargarSeccionesPropias();
 }
 
-// Refleja los filtros en la URL (?q=&genero=...) para poder volver al catálogo tal como estaba.
+// Los filtros quedan en la URL; pelicula.html los lee de sessionStorage para «Volver al catálogo».
 function guardarEnURL() {
   const params = new URLSearchParams();
   if (estado.texto.trim()) params.set("q", estado.texto.trim());
@@ -217,8 +212,8 @@ function guardarEnURL() {
   if (estado.orden !== INICIAL.orden) params.set("orden", estado.orden);
   if (estado.soloFav) params.set("fav", "1");
   const query = params.toString();
-  try { history.replaceState(null, "", `${location.pathname}${query ? "?" + query : ""}${location.hash}`); } catch { /* p. ej. file:// en algunos navegadores */ }
-  try { sessionStorage.setItem("ml_filtros", query); } catch { /* lo usa "Volver al catálogo" en pelicula.html */ }
+  try { history.replaceState(null, "", `${location.pathname}${query ? "?" + query : ""}${location.hash}`); } catch {}
+  try { sessionStorage.setItem("pj_filtros", query); } catch {}
 }
 
 function actualizarCatalogo() {
@@ -226,7 +221,7 @@ function actualizarCatalogo() {
   cargarCatalogo();
 }
 
-// Copia el estado a los controles y vuelve a leerlos: un valor inválido en la URL queda en "Todos".
+// Pasa el estado a los controles y lo vuelve a leer, así un valor inválido de la URL queda en "Todos".
 function sincronizarControles() {
   $("buscar").value = estado.texto;
   $("f-genero").value = estado.genero;
@@ -259,10 +254,10 @@ function iniciarControles() {
     soloFav: url.get("fav") === "1"
   });
   sincronizarControles();
-  // Si se llega con una búsqueda (p. ej. desde pelicula.html), se muestra directamente el catálogo.
+  // Si se llega con filtros (por ejemplo, buscando desde pelicula.html), se baja al catálogo.
   if ([...url.keys()].length && !location.hash) requestAnimationFrame(() => $("catalogo").scrollIntoView());
 
-  // La búsqueda espera a que se deje de escribir para no pedir a TMDB en cada tecla.
+  // Espera 400 ms sin escribir antes de buscar, para no hacer una petición por tecla.
   let espera;
   $("buscar").addEventListener("input", (e) => {
     estado.texto = e.target.value;

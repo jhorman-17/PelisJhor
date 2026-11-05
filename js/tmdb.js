@@ -1,18 +1,16 @@
-/* ============================================================
-   Conexión con la API de TMDB. Requiere peliculas.js y config.js.
-   Todas las películas (catálogo, búsqueda, detalle y pósteres) salen de aquí.
-   ============================================================ */
+// Peticiones a la API de TMDB. Necesita utilidades.js y config.js.
+
 const TMDB_API = "https://api.themoviedb.org/3";
 const TMDB_IMG = "https://image.tmdb.org/t/p/w500";
 const TMDB_FONDO = "https://image.tmdb.org/t/p/w1280";
 const TMDB_REGION = "CO";
-const CACHE_GENEROS = "ml_generos_tmdb";
+const CACHE_GENEROS = "pj_generos_tmdb";
 const CACHE_DIAS = 7;
 
-// id de género → nombre en español. Se llena con TMDB.cargarGeneros().
+// id de género → nombre en español (lo llena TMDB.cargarGeneros).
 const GENEROS = new Map();
 
-// Convierte una película de TMDB (de una lista o del detalle) al formato que usa la web.
+// Pasa una película de TMDB al formato que usan las páginas.
 function desdeTMDB(m) {
   const directores = m.credits ? m.credits.crew.filter((c) => c.job === "Director").map((c) => c.name) : [];
   const actores = m.credits ? m.credits.cast.slice(0, 5).map((c) => c.name) : [];
@@ -39,7 +37,7 @@ function desdeTMDB(m) {
 const TMDB = {
   _cache: new Map(),
 
-  // GET a la API. Las respuestas se guardan en memoria mientras la página está abierta.
+  // Cada respuesta queda en memoria para no repetir la misma petición.
   get(ruta, params = {}) {
     if (typeof TMDB_TOKEN === "undefined" || !TMDB_TOKEN) return Promise.reject(new Error("Falta el token de TMDB en js/config.js"));
     const url = new URL(TMDB_API + ruta);
@@ -66,25 +64,24 @@ const TMDB = {
     lista.forEach((g) => GENEROS.set(g.id, g.name));
   },
 
-  // Listas de TMDB: "now_playing", "popular", "top_rated" o "upcoming".
+  // nombre: "now_playing", "popular", "top_rated" o "upcoming".
   async lista(nombre) {
     const data = await this.get(`/movie/${nombre}`, { region: TMDB_REGION });
     return data.results.map(desdeTMDB);
   },
 
-  // Explorar con filtros (/discover) o buscar por texto (/search). Devuelve una página de resultados.
+  // Con texto usa /search; sin texto, /discover con los filtros. TMDB no deja pasar de la página 500.
   async explorar(params, pagina) {
     const ruta = params.query ? "/search/movie" : "/discover/movie";
     const data = await this.get(ruta, { include_adult: false, ...params, page: pagina });
     return { peliculas: data.results.map(desdeTMDB), total: data.total_results, paginas: Math.min(data.total_pages, 500) };
   },
 
-  // Ficha completa (con director y reparto).
   async pelicula(id) {
     return desdeTMDB(await this.get(`/movie/${id}`, { append_to_response: "credits" }));
   },
 
-  // Varias fichas a la vez (favoritas, reseñadas). Las que fallen se omiten.
+  // Si alguna falla, se omite y se devuelven las demás.
   async peliculas(ids) {
     const r = await Promise.allSettled(ids.map((id) => this.pelicula(id)));
     return r.filter((x) => x.status === "fulfilled").map((x) => x.value);

@@ -12,14 +12,14 @@
 </head>
 <body id="inicio">
   <header>
-    <nav class="navbar navbar-expand-md sticky-top ml-nav" aria-label="Principal">
+    <nav class="navbar navbar-expand-md sticky-top pj-nav" aria-label="Principal">
       <div class="container-fluid px-3 px-md-4">
-        <a class="navbar-brand ml-logo" href="index.html">PelisJhor</a>
+        <a class="navbar-brand pj-logo" href="index.html">PelisJhor</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu" aria-controls="menu" aria-expanded="false" aria-label="Abrir menú">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="menu">
-          <ul class="navbar-nav mx-md-auto ml-nav-links">
+          <ul class="navbar-nav mx-md-auto pj-nav-links">
             <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
             <li class="nav-item"><a class="nav-link" href="#catalogo">Películas</a></li>
             <li class="nav-item"><a class="nav-link" href="#favoritas">Favoritas</a></li>
@@ -36,38 +36,38 @@
   <main>
     <h1 class="visually-hidden">PelisJhor: explora, reseña y guarda películas</h1>
     <div class="container">
-      <section class="ml-section" aria-labelledby="t-populares">
-        <h2 class="ml-eyebrow" id="t-populares">Las más populares</h2>
+      <section class="pj-section" aria-labelledby="t-populares">
+        <h2 class="pj-eyebrow" id="t-populares">Las más populares</h2>
         <div id="carrusel" class="carousel slide carrusel" aria-roledescription="carrusel">
-          <p class="ml-meta p-4 mb-0">Cargando películas…</p>
+          <p class="pj-meta p-4 mb-0">Cargando películas…</p>
         </div>
       </section>
 
-      <section class="ml-section" aria-labelledby="t-recientes">
-        <h2 class="ml-eyebrow" id="t-recientes">En cartelera</h2>
+      <section class="pj-section" aria-labelledby="t-recientes">
+        <h2 class="pj-eyebrow" id="t-recientes">En cartelera</h2>
         <div class="row row-cols-3 row-cols-sm-4 row-cols-md-6 row-cols-xl-8 g-2" id="recientes"></div>
       </section>
 
-      <section class="ml-section" id="catalogo" aria-labelledby="t-catalogo">
-        <h2 class="ml-eyebrow" id="t-catalogo">Catálogo</h2>
+      <section class="pj-section" id="catalogo" aria-labelledby="t-catalogo">
+        <h2 class="pj-eyebrow" id="t-catalogo">Catálogo</h2>
         <div class="row g-2 mb-3 align-items-end">
           <div class="col-6 col-sm-3 col-md-2">
-            <label class="form-label ml-label" for="f-genero">Género</label>
+            <label class="form-label pj-label" for="f-genero">Género</label>
             <select class="form-select form-select-sm" id="f-genero"><option value="">Todos</option></select>
           </div>
           <div class="col-6 col-sm-3 col-md-2">
-            <label class="form-label ml-label" for="f-anio">Año</label>
+            <label class="form-label pj-label" for="f-anio">Año</label>
             <select class="form-select form-select-sm" id="f-anio"><option value="">Todos</option></select>
           </div>
           <div class="col-6 col-sm-3 col-md-2">
-            <label class="form-label ml-label" for="f-min">Calificación mín.</label>
+            <label class="form-label pj-label" for="f-min">Calificación mín.</label>
             <select class="form-select form-select-sm" id="f-min">
               <option value="0">Cualquiera</option><option value="1">1★ o más</option><option value="2">2★ o más</option>
               <option value="3">3★ o más</option><option value="4">4★ o más</option><option value="5">5★</option>
             </select>
           </div>
           <div class="col-6 col-sm-3 col-md-2">
-            <label class="form-label ml-label" for="f-orden">Ordenar por</label>
+            <label class="form-label pj-label" for="f-orden">Ordenar por</label>
             <select class="form-select form-select-sm" id="f-orden">
               <option value="popularidad">Popularidad</option><option value="fecha">Fecha de estreno</option><option value="calificacion">Calificación</option>
             </select>
@@ -75,35 +75,35 @@
           <div class="col-6 col-sm-6 col-md-2">
             <div class="form-check">
               <input class="form-check-input" type="checkbox" id="f-fav">
-              <label class="form-check-label ml-label" for="f-fav">Solo favoritas</label>
+              <label class="form-check-label pj-label" for="f-fav">Solo favoritas</label>
             </div>
           </div>
           <div class="col-6 col-sm-6 col-md-2">
-            <button type="button" class="btn btn-sm btn-ml-secondary w-100" id="limpiar">Limpiar filtros</button>
+            <button type="button" class="btn btn-sm btn-pj-secondary w-100" id="limpiar">Limpiar filtros</button>
           </div>
         </div>
-        <p class="ml-meta" id="contador" aria-live="polite"></p>
+        <p class="pj-meta" id="contador" aria-live="polite"></p>
         <div class="row row-cols-3 row-cols-sm-4 row-cols-md-6 row-cols-xl-8 g-2" id="grid"></div>
-        <p class="ml-empty d-none" id="sin-resultados">No hay películas que coincidan con la búsqueda o los filtros.</p>
-        <div class="text-center mt-4"><button type="button" class="btn btn-ml-secondary d-none" id="mas">Cargar más películas</button></div>
+        <p class="pj-empty d-none" id="sin-resultados">No hay películas que coincidan con la búsqueda o los filtros.</p>
+        <div class="text-center mt-4"><button type="button" class="btn btn-pj-secondary d-none" id="mas">Cargar más películas</button></div>
       </section>
 
-      <section class="ml-section" aria-labelledby="t-destacadas">
-        <h2 class="ml-eyebrow" id="t-destacadas">Mejor calificadas</h2>
+      <section class="pj-section" aria-labelledby="t-destacadas">
+        <h2 class="pj-eyebrow" id="t-destacadas">Mejor calificadas</h2>
         <div class="row row-cols-3 row-cols-sm-4 row-cols-md-6 row-cols-xl-8 g-2" id="destacadas"></div>
-        <p class="ml-empty d-none" id="sin-destacadas">Aún no hay calificaciones. Escribe reseñas con estrellas en la página de cada película.</p>
+        <p class="pj-empty d-none" id="sin-destacadas">Aún no hay calificaciones. Escribe reseñas con estrellas en la página de cada película.</p>
       </section>
 
-      <section class="ml-section" id="favoritas" aria-labelledby="t-fav">
-        <h2 class="ml-eyebrow" id="t-fav">Favoritas</h2>
+      <section class="pj-section" id="favoritas" aria-labelledby="t-fav">
+        <h2 class="pj-eyebrow" id="t-fav">Favoritas</h2>
         <div class="row row-cols-3 row-cols-sm-4 row-cols-md-6 row-cols-xl-8 g-2" id="favoritas-grid"></div>
-        <p class="ml-empty d-none" id="sin-favoritas">Todavía no tienes favoritas. Pulsa el corazón de cualquier póster.</p>
+        <p class="pj-empty d-none" id="sin-favoritas">Todavía no tienes favoritas. Pulsa el corazón de cualquier póster.</p>
       </section>
     </div>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="js/peliculas.js"></script>
+  <script src="js/utilidades.js"></script>
   <script src="js/config.js"></script>
   <script src="js/tmdb.js"></script>
   <script src="js/app.js"></script>

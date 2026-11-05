@@ -1,0 +1,13 @@
+{
+  "name": "pelisjhor",
+  "version": "1.0.0",
+  "private": true,
+  "description": "PelisJhor: sitio de reseñas de películas (proyecto universitario)",
+  "scripts": {
+    "sass": "sass scss/styles.scss css/styles.css --no-source-map",
+    "sass:watch": "sass scss/styles.scss css/styles.css --no-source-map --watch"
+  },
+  "devDependencies": {
+    "sass": "^1.107.1"
+  }
+}

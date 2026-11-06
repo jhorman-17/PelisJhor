@@ -4,6 +4,14 @@ Sitio web para explorar películas, escribir reseñas y guardar favoritas. Es un
 
 Las películas se obtienen de la API de [TMDB](https://www.themoviedb.org/). Las reseñas y las favoritas se guardan en el navegador con `localStorage`.
 
+## Video
+
+Video de presentación del proyecto, parte de la actividad:
+
+[![Video de presentación de PelisJhor](https://img.youtube.com/vi/Kl15I3j-47c/hqdefault.jpg)](https://youtu.be/Kl15I3j-47c)
+
+Enlace: <https://youtu.be/Kl15I3j-47c>
+
 ## Tecnologías
 
 - HTML5

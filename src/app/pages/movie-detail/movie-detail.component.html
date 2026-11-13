@@ -1,0 +1,74 @@
+<main class="container pj-section">
+  <p><a class="pj-back" routerLink="/" [queryParams]="filtrosCatalogo" fragment="catalogo">← Volver al catálogo</a></p>
+  <div id="detalle">
+    @switch (estado()) {
+      @case ("cargando") {
+        <p class="pj-meta">Cargando película…</p>
+      }
+      @case ("no-encontrada") {
+        <div class="pj-empty">
+          <h1 class="h4">Película no encontrada</h1>
+          <p>No existe una película con el identificador solicitado.</p><a class="btn btn-pj-primary" routerLink="/">Volver al inicio</a>
+        </div>
+      }
+      @case ("error") {
+        <div class="pj-empty">
+          <h1 class="h4">No se pudo cargar la película</h1>
+          <p>No se pudo conectar con TMDB. Revisa tu conexión a internet y recarga la página.</p>
+        </div>
+      }
+      @case ("lista") {
+        @if (pelicula(); as p) {
+          <article>
+            <div class="row g-4">
+              <div class="col-6 col-sm-4 col-md-3 mx-auto mx-sm-0">
+                <div class="poster-wrap"><app-poster [pelicula]="p" [prioritaria]="true" /></div>
+              </div>
+              <div class="col-12 col-sm-8 col-md-9">
+                <h1 class="h2 text-white">{{ p.titulo }} <small class="pj-meta">{{ p.anio ?? "" }}</small></h1>
+                <div class="mb-3" id="media">
+                  @let m = media();
+                  @if (m !== null) {
+                    <app-stars [valor]="m" />&ngsp;<span class="pj-meta">{{ m.toFixed(1) }} · {{ numeroResenas() }} reseña(s)</span>
+                  } @else {
+                    <span class="pj-meta">Sin calificaciones todavía</span>
+                  }
+                </div>
+                <p class="review-text">{{ p.sinopsis ?? "Sinopsis: " + ND }}</p>
+                <dl class="detalle-datos row mt-3">
+                  <div class="col-6 col-md-4"><dt>Estreno</dt><dd>{{ p.fechaEstreno ? (p.fechaEstreno | date: "longDate") : ND }}</dd></div>
+                  <div class="col-6 col-md-4"><dt>Duración</dt><dd>{{ p.duracion ?? ND }}</dd></div>
+                  <div class="col-12 col-md-4"><dt>Director</dt><dd>{{ p.director ?? ND }}</dd></div>
+                  <div class="col-12 col-md-6">
+                    <dt>Géneros</dt>
+                    <dd>
+                      @for (g of p.generos; track g) {
+                        <span class="badge-pj me-1">{{ g }}</span>
+                      } @empty {
+                        {{ ND }}
+                      }
+                    </dd>
+                  </div>
+                  <div class="col-12 col-md-6"><dt>Actores principales</dt><dd>{{ p.actores ? p.actores.join(", ") : ND }}</dd></div>
+                  <div class="col-12 col-md-6">
+                    <dt>Calificación en TMDB</dt>
+                    <dd>
+                      @if (p.voto !== null) {
+                        <app-stars [valor]="p.voto" /> {{ p.voto.toFixed(1) }} · {{ votos(p) }} votos
+                      } @else {
+                        {{ ND }}
+                      }
+                    </dd>
+                  </div>
+                </dl>
+                <button type="button" class="btn fav-btn fav-btn-lg" [class.active]="favorita()" [attr.aria-pressed]="favorita()"
+                  (click)="almacen.alternarFavorita(p.id)">{{ favorita() ? "♥ En favoritas" : "♡ Añadir a favoritas" }}</button>
+              </div>
+            </div>
+          </article>
+          <app-reviews [peliculaId]="p.id" />
+        }
+      }
+    }
+  </div>
+</main>

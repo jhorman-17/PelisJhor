@@ -1,0 +1,29 @@
+:host { display: block; }
+
+#lista-resenas .pj-card { border-left: 3px solid var(--pj-accent); }
+.review-user { margin-right: 8px; font-size: 15px; font-weight: 700; color: var(--pj-heading); }
+
+.star-input {
+  display: inline-flex; gap: 6px;
+
+  button {
+    background: none; border: 0; padding: 2px 3px; border-radius: var(--pj-radius);
+    font-size: 32px; line-height: 1;
+    color: transparent; -webkit-text-stroke: 1.5px var(--pj-text-muted);
+    transition: transform var(--pj-ease);
+
+    &.on { color: var(--pj-accent); -webkit-text-stroke: 0; }
+    &:hover { transform: scale(1.12); }
+  }
+
+  // Al pasar el cursor se rellenan las estrellas hasta la señalada
+  &:has(button:hover) button {
+    color: transparent; -webkit-text-stroke: 1.5px var(--pj-text-muted);
+    &:hover,
+    &:has(~ button:hover) { color: var(--pj-accent); -webkit-text-stroke: 0; }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .star-input button:hover { transform: none; }
+}

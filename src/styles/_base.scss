@@ -1,0 +1,53 @@
+@use "variables" as *;
+
+html { color-scheme: dark; scroll-padding-top: 76px; }
+body {
+  background-color: var(--pj-bg);
+  background-image:
+    radial-gradient(900px 420px at 12% -8%, rgba($acento, .08), transparent 70%),
+    radial-gradient(800px 500px at 100% 0%, rgba(40, 90, 105, .22), transparent 70%);
+  background-repeat: no-repeat;
+  color: var(--pj-text);
+  font-family: var(--pj-font-ui);
+  font-size: 15px;
+  line-height: 1.6;
+}
+h1, h2, h3, h4 { color: var(--pj-heading); font-family: var(--pj-font-ui); letter-spacing: -.01em; }
+a { text-decoration: none; }
+::selection { background: var(--pj-accent); color: var(--pj-on-accent); }
+:focus-visible { outline: 2px solid var(--pj-accent); outline-offset: 3px; }
+
+// Secciones y textos
+.pj-section { padding-top: 48px; margin-bottom: 24px; }
+.pj-eyebrow {
+  position: relative;
+  font-family: var(--pj-font-editorial); font-size: 22px; font-weight: 700;
+  letter-spacing: -.005em; text-transform: none; color: var(--pj-heading);
+  border-bottom: 1px solid var(--pj-border); padding-bottom: 10px; margin-bottom: 20px;
+
+  &::after {
+    content: ""; position: absolute; left: 0; bottom: -1px; width: 56px; height: 2px; background: var(--pj-accent);
+  }
+}
+.pj-meta { font-size: 13px; color: var(--pj-text-2); }
+.pj-empty {
+  color: var(--pj-text-2); background: var(--pj-surface);
+  border: 1px dashed var(--pj-border-strong); border-radius: var(--pj-radius-lg);
+  padding: 20px; text-align: center;
+}
+.pj-back {
+  display: inline-block; font-size: 13px; text-transform: uppercase; letter-spacing: .08em;
+  color: var(--pj-text-2); transition: color var(--pj-ease);
+  &:hover { color: var(--pj-accent); }
+}
+main { padding-bottom: 64px; }
+
+// Tarjetas de contenido (reseñas, formularios) y texto largo
+.pj-card {
+  background: var(--pj-surface); border: 1px solid var(--pj-border);
+  border-radius: var(--pj-radius-lg); padding: 20px;
+}
+.review-text {
+  margin: 10px 0 0; font-family: var(--pj-font-editorial); font-size: 16px; line-height: 1.7;
+  color: var(--pj-text); white-space: pre-wrap;
+}

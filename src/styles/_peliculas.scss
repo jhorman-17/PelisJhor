@@ -1,0 +1,86 @@
+// Cuadrícula, pósteres, tarjetas y botón de favorita. Son globales porque los usan varios
+// componentes a la vez (MovieCard, Poster, Carousel y MovieDetail).
+@use "sass:math";
+@use "variables" as *;
+
+.row.g-2 { --bs-gutter-x: .875rem; --bs-gutter-y: 1.5rem; }
+
+// Bootstrap solo trae row-cols hasta 6. El nombre de la clase se arma con interpolación: .row-cols-xl-8
+@media (min-width: $bp-xl) {
+  .row-cols-xl-#{$columnas-xl} > * { flex: 0 0 auto; width: math.div(100%, $columnas-xl); }
+}
+
+// Va antes de .poster-card para que el borde de hover gane al de favorita.
+.poster-wrap {
+  position: relative; overflow: hidden;
+  background: var(--pj-surface); border-radius: var(--pj-radius);
+  box-shadow: 0 0 0 1px var(--pj-border), 0 2px 6px rgba(0, 0, 0, .35);
+  transition: transform var(--pj-ease), box-shadow var(--pj-ease);
+
+  &::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(180deg, transparent 55%, rgba($fondo, .55));
+    opacity: 0; transition: opacity var(--pj-ease);
+  }
+
+  // Favorita: borde y barra inferior coral
+  &:has(.fav-btn.active) {
+    box-shadow: 0 0 0 1px var(--pj-fav), 0 2px 6px rgba(0, 0, 0, .35);
+    &::before {
+      content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 4px; z-index: 1; background: var(--pj-fav);
+    }
+  }
+}
+.poster-img {
+  display: block; width: 100%; aspect-ratio: 2 / 3; object-fit: cover; border: 0;
+  transition: transform 400ms ease;
+}
+
+.poster-card {
+  display: block;
+
+  &:hover .poster-wrap,
+  &:has(:focus-visible) .poster-wrap {
+    transform: translateY(-4px);
+    box-shadow: 0 0 0 2px var(--pj-accent), 0 14px 28px rgba(0, 0, 0, .5);
+    &::after { opacity: 1; }
+  }
+  &:hover .poster-img { transform: scale(1.04); }
+}
+
+.poster-title {
+  margin: 10px 0 2px; font-size: 14px; font-weight: 700; line-height: 1.3; color: var(--pj-heading);
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+}
+.poster-meta { margin: 0; font-size: 12px; letter-spacing: .03em; color: var(--pj-text-2); }
+
+// Póster que no cargó
+.poster-error {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+  padding: 10px; text-align: center; font-size: 12px; word-break: break-all;
+  background: var(--pj-surface); color: var(--pj-text-2);
+  border: 1px dashed var(--pj-border-strong); border-radius: var(--pj-radius);
+
+  strong { color: var(--pj-heading); }
+}
+
+// Corazón sobre el póster: contorno = no es favorita, relleno = sí
+.fav-btn {
+  position: absolute; top: 8px; right: 8px; z-index: 2;
+  display: grid; place-items: center; width: 36px; height: 36px; padding: 0;
+  border: 1px solid rgba(255, 255, 255, .18); border-radius: 50%;
+  background: rgba($fondo, .72);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+  font-size: 18px; line-height: 1;
+  color: transparent; -webkit-text-stroke: 1.4px var(--pj-heading);
+  transition: transform var(--pj-ease), border-color var(--pj-ease), background-color var(--pj-ease);
+
+  &:hover {
+    background: rgba($fondo, .92); border-color: var(--pj-fav);
+    -webkit-text-stroke-color: var(--pj-fav); transform: scale(1.08);
+  }
+  &.active {
+    color: var(--pj-fav); -webkit-text-stroke: 0;
+    border-color: var(--pj-fav); background: rgba($fondo, .88);
+  }
+}

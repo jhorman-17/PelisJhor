@@ -1,0 +1,63 @@
+@let f = filtros();
+@let c = catalogo();
+<section class="pj-section" id="catalogo" aria-labelledby="t-catalogo">
+  <h2 class="pj-eyebrow" id="t-catalogo">Catálogo</h2>
+  <div class="row g-2 mb-3 align-items-end">
+    <div class="col-6 col-sm-3 col-md-2">
+      <label class="form-label pj-label" for="f-genero">Género</label>
+      <select class="form-select form-select-sm" id="f-genero" #genero (change)="cambiar('genero', genero.value)">
+        <option value="" [selected]="!f.genero">Todos</option>
+        @for (g of generos(); track g.id) {
+          <option [value]="g.id" [selected]="g.id === f.genero">{{ g.nombre }}</option>
+        }
+      </select>
+    </div>
+    <div class="col-6 col-sm-3 col-md-2">
+      <label class="form-label pj-label" for="f-anio">Año</label>
+      <select class="form-select form-select-sm" id="f-anio" #anio (change)="cambiar('anio', anio.value)">
+        <option value="" [selected]="!f.anio">Todos</option>
+        @for (a of anios; track a) {
+          <option [value]="a" [selected]="a === f.anio">{{ a }}</option>
+        }
+      </select>
+    </div>
+    <div class="col-6 col-sm-3 col-md-2">
+      <label class="form-label pj-label" for="f-min">Calificación mín.</label>
+      <select class="form-select form-select-sm" id="f-min" #min (change)="cambiar('min', +min.value)">
+        @for (o of opcionesMin; track o.valor) {
+          <option [value]="o.valor" [selected]="o.valor === f.min">{{ o.texto }}</option>
+        }
+      </select>
+    </div>
+    <div class="col-6 col-sm-3 col-md-2">
+      <label class="form-label pj-label" for="f-orden">Ordenar por</label>
+      <select class="form-select form-select-sm" id="f-orden" #orden (change)="cambiarOrden(orden.value)">
+        @for (o of opcionesOrden; track o.valor) {
+          <option [value]="o.valor" [selected]="o.valor === f.orden">{{ o.texto }}</option>
+        }
+      </select>
+    </div>
+    <div class="col-6 col-sm-6 col-md-2">
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="f-fav" #fav [checked]="f.soloFav" (change)="cambiar('soloFav', fav.checked)">
+        <label class="form-check-label pj-label" for="f-fav">Solo favoritas</label>
+      </div>
+    </div>
+    <div class="col-6 col-sm-6 col-md-2">
+      <button type="button" class="btn btn-sm btn-pj-secondary w-100" (click)="limpiar()">Limpiar filtros</button>
+    </div>
+  </div>
+
+  <p class="pj-meta" id="contador" aria-live="polite">{{ contador() }}</p>
+  <app-movie-grid id="grid" [peliculas]="c.lista" />
+  @if (!c.cargando && !c.error && c.lista.length === 0) {
+    <p class="pj-empty" id="sin-resultados">No hay películas que coincidan con la búsqueda o los filtros.</p>
+  }
+  <div class="text-center mt-4">
+    @if (hayMas() && !c.error) {
+      <button type="button" class="btn btn-pj-secondary" [disabled]="c.cargando" (click)="cargar(true)">
+        {{ c.cargando ? "Cargando…" : "Cargar más películas" }}
+      </button>
+    }
+  </div>
+</section>

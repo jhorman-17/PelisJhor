@@ -1,0 +1,91 @@
+<main class="container pj-section">
+  <p><a class="pj-back" routerLink="/">← Volver al inicio</a></p>
+
+  <h1 class="contacto-titulo">Contactos</h1>
+  <p class="contacto-intro">¿Tienes una sugerencia, encontraste un error o quieres comentar algo sobre PelisJhor? Puedes usar el formulario o los enlaces del proyecto.</p>
+
+  <div class="row g-4 mt-2">
+    <div class="col-12 col-md-5">
+      <section class="pj-card" aria-labelledby="t-info">
+        <h2 class="pj-eyebrow" id="t-info">Información de contacto</h2>
+        <dl class="contacto-datos mb-0">
+          <dt>Proyecto</dt>
+          <dd>PelisJhor, sitio universitario de reseñas de películas</dd>
+          @if (contacto.correo) {
+            <dt>Correo</dt>
+            <dd><a [href]="'mailto:' + contacto.correo">{{ contacto.correo }}</a></dd>
+          }
+          @if (contacto.telefono) {
+            <dt>Teléfono</dt>
+            <dd><a [href]="'tel:' + contacto.telefono">{{ telefonoLegible }}</a></dd>
+          }
+          @for (red of contacto.redes; track red.url) {
+            <dt>{{ red.nombre }}</dt>
+            <dd><a [href]="red.url" target="_blank" rel="noopener">{{ red.usuario }}</a></dd>
+          }
+          <dt>Repositorio</dt>
+          <dd><a [href]="contacto.repositorio" target="_blank" rel="noopener">github.com/jhorman-17/PelisJhor</a></dd>
+          <dt>Video de presentación</dt>
+          <dd><a [href]="contacto.video" target="_blank" rel="noopener">youtu.be/Kl15I3j-47c</a></dd>
+          <dt>Datos de las películas</dt>
+          <dd><a [href]="contacto.datosPeliculas" target="_blank" rel="noopener">The Movie Database (TMDB)</a></dd>
+        </dl>
+      </section>
+    </div>
+
+    <div class="col-12 col-md-7">
+      <form class="pj-card" novalidate [formGroup]="formulario" (ngSubmit)="enviar()" aria-labelledby="t-form">
+        <h2 class="pj-eyebrow" id="t-form">Escribe un mensaje</h2>
+
+        <div class="mb-3">
+          <label class="form-label pj-label" for="c-nombre">Nombre</label>
+          <input class="form-control" id="c-nombre" formControlName="nombre" autocomplete="name" maxlength="60"
+            [class.is-invalid]="tieneError('nombre')" [attr.aria-invalid]="tieneError('nombre')" [attr.aria-describedby]="tieneError('nombre') ? 'e-nombre' : null">
+          @if (tieneError("nombre")) {
+            <div class="invalid-feedback" id="e-nombre">{{ mensajeError("nombre") }}</div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label pj-label" for="c-correo">Correo electrónico</label>
+          <input class="form-control" id="c-correo" type="email" formControlName="correo" autocomplete="email" maxlength="120"
+            [class.is-invalid]="tieneError('correo')" [attr.aria-invalid]="tieneError('correo')" [attr.aria-describedby]="tieneError('correo') ? 'e-correo' : null">
+          @if (tieneError("correo")) {
+            <div class="invalid-feedback" id="e-correo">{{ mensajeError("correo") }}</div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label pj-label" for="c-asunto">Asunto</label>
+          <input class="form-control" id="c-asunto" formControlName="asunto" maxlength="100"
+            [class.is-invalid]="tieneError('asunto')" [attr.aria-invalid]="tieneError('asunto')" [attr.aria-describedby]="tieneError('asunto') ? 'e-asunto' : null">
+          @if (tieneError("asunto")) {
+            <div class="invalid-feedback" id="e-asunto">{{ mensajeError("asunto") }}</div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label pj-label" for="c-mensaje">Mensaje</label>
+          <textarea class="form-control" id="c-mensaje" rows="5" formControlName="mensaje" maxlength="1000"
+            [class.is-invalid]="tieneError('mensaje')" [attr.aria-invalid]="tieneError('mensaje')" [attr.aria-describedby]="tieneError('mensaje') ? 'e-mensaje' : null"></textarea>
+          @if (tieneError("mensaje")) {
+            <div class="invalid-feedback" id="e-mensaje">{{ mensajeError("mensaje") }}</div>
+          }
+        </div>
+
+        <button type="submit" class="btn btn-pj-primary">Enviar mensaje</button>
+        <p class="pj-meta mt-3 mb-0">
+          Este formulario es una demostración: revisa que los datos estén completos y bien escritos, pero no envía
+          mensajes porque PelisJhor no tiene servidor.
+        </p>
+
+        @if (confirmacion(); as nombre) {
+          <div class="contacto-aviso mt-3" role="status">
+            <strong>¡Gracias, {{ nombre }}!</strong> Los datos son válidos. Como esta página no tiene servidor, el mensaje
+            no se envió ni se guardó.
+          </div>
+        }
+      </form>
+    </div>
+  </div>
+</main>

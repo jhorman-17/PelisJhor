@@ -1,0 +1,47 @@
+<div id="carrusel" class="carousel slide carrusel" aria-roledescription="carrusel" #carrusel>
+  @let lista = peliculas();
+  @if (lista === null) {
+    <p class="pj-meta p-4 mb-0">Cargando películas…</p>
+  } @else if (lista.length === 0) {
+    <p class="pj-meta p-4 mb-0">{{ sinConexion }}</p>
+  } @else {
+    <div class="carousel-indicators">
+      @for (p of lista; track p.id; let i = $index, primera = $first) {
+        <button type="button" data-bs-target="#carrusel" [attr.data-bs-slide-to]="i" [class.active]="primera"
+          [attr.aria-current]="primera ? 'true' : null" [attr.aria-label]="p.titulo"></button>
+      }
+    </div>
+    <div class="carousel-inner">
+      @for (p of lista; track p.id; let i = $index, primera = $first) {
+        <div class="carousel-item" [class.active]="primera" role="group" aria-roledescription="diapositiva" [attr.aria-label]="i + 1 + ' de ' + lista.length">
+          <div class="carrusel-slide">
+            @if (p.fondo) {
+              <img class="carrusel-fondo" alt="" [attr.loading]="primera ? null : 'lazy'" [src]="p.fondo">
+            }
+            <div class="carrusel-contenido">
+              <a class="carrusel-poster d-none d-md-block" [routerLink]="['/pelicula', p.id]" tabindex="-1" aria-hidden="true">
+                <app-poster [pelicula]="p" [prioritaria]="primera" />
+              </a>
+              <div class="carrusel-texto">
+                <p class="carrusel-numero">{{ dosDigitos(i + 1) }} / {{ dosDigitos(lista.length) }}</p>
+                <h3>{{ p.titulo }}</h3>
+                <p class="pj-meta">{{ meta(p) }}</p>
+                <p class="carrusel-sinopsis">{{ p.sinopsis ?? "" }}</p>
+                <a class="btn btn-pj-primary me-2" [routerLink]="['/pelicula', p.id]">Ver detalle</a>&ngsp;
+                @let favorita = almacen.esFavorita(p.id);
+                <button type="button" class="btn btn-pj-secondary" [class.active]="favorita" [attr.aria-pressed]="favorita"
+                  (click)="almacen.alternarFavorita(p.id)">{{ favorita ? "♥ En favoritas" : "♡ Añadir a favoritas" }}</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carrusel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="visually-hidden">Anterior</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carrusel" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span><span class="visually-hidden">Siguiente</span>
+    </button>
+  }
+</div>

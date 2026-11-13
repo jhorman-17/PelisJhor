@@ -1,0 +1,9 @@
+:host { display: block; }
+
+// Panel de filtros
+#catalogo > .row.mb-3 {
+  --bs-gutter-y: .75rem;
+  margin: 0 0 20px; padding: 4px 10px 14px;
+  background: var(--pj-surface); border: 1px solid var(--pj-border);
+  border-radius: var(--pj-radius-lg);
+}

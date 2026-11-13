@@ -1,0 +1,10 @@
+@let p = pelicula();
+@if (!p.poster) {
+  <div class="poster-img poster-error" role="img" [attr.aria-label]="'Póster de ' + p.titulo"><strong>Sin póster</strong></div>
+} @else if (falloCarga()) {
+  <div class="poster-img poster-error" role="img" [attr.aria-label]="'Póster de ' + p.titulo">
+    <strong>Imagen no encontrada</strong><span>{{ p.poster }}</span>
+  </div>
+} @else {
+  <img class="poster-img" [attr.loading]="prioritaria() ? null : 'lazy'" [src]="p.poster" [alt]="'Póster de ' + p.titulo" (error)="falloCarga.set(true)">
+}

@@ -1,0 +1,27 @@
+<header>
+  <nav class="navbar navbar-expand-md sticky-top pj-nav" aria-label="Principal">
+    <div class="container-fluid px-3 px-md-4">
+      <a class="navbar-brand pj-logo" routerLink="/">PelisJhor</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu" aria-controls="menu" aria-expanded="false" aria-label="Abrir menú">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="menu" #menu>
+        <ul class="navbar-nav mx-md-auto pj-nav-links">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/" routerLinkActive="" [routerLinkActiveOptions]="{ exact: true }" ariaCurrentWhenActive="page">Inicio</a>
+          </li>
+          <li class="nav-item"><a class="nav-link" routerLink="/" fragment="catalogo" queryParamsHandling="preserve">Películas</a></li>
+          <li class="nav-item"><a class="nav-link" routerLink="/" fragment="favoritas" queryParamsHandling="preserve">Favoritas</a></li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/contactos" routerLinkActive="" ariaCurrentWhenActive="page">Contactos</a>
+          </li>
+        </ul>
+        <form class="d-flex" role="search" (submit)="buscar($event)">
+          <label class="visually-hidden" for="buscar">Buscar por título o género</label>
+          <input class="form-control form-control-sm" id="buscar" name="q" type="search" placeholder="Buscar título o género" autocomplete="off"
+            [value]="busqueda.texto()" (input)="escribir($event)">
+        </form>
+      </div>
+    </div>
+  </nav>
+</header>

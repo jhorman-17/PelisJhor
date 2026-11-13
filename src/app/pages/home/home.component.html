@@ -1,0 +1,38 @@
+<main>
+  <h1 class="visually-hidden">PelisJhor: explora, reseña y guarda películas</h1>
+  <div class="container">
+    <section class="pj-section" aria-labelledby="t-populares">
+      <h2 class="pj-eyebrow" id="t-populares">Las más populares</h2>
+      <app-carousel />
+    </section>
+
+    <section class="pj-section" aria-labelledby="t-recientes">
+      <h2 class="pj-eyebrow" id="t-recientes">En cartelera</h2>
+      <app-movie-grid id="recientes" [peliculas]="cartelera()">
+        @if (errorCartelera()) {
+          <p class="pj-meta">{{ sinConexion }}</p>
+        }
+      </app-movie-grid>
+    </section>
+
+    <app-catalog />
+
+    <section class="pj-section" aria-labelledby="t-destacadas">
+      <h2 class="pj-eyebrow" id="t-destacadas">Mejor calificadas</h2>
+      @let mejores = mejorCalificadas();
+      <app-movie-grid id="destacadas" [peliculas]="mejores ?? []" />
+      @if (mejores?.length === 0) {
+        <p class="pj-empty" id="sin-destacadas">Aún no hay calificaciones. Escribe reseñas con estrellas en la página de cada película.</p>
+      }
+    </section>
+
+    <section class="pj-section" id="favoritas" aria-labelledby="t-fav">
+      <h2 class="pj-eyebrow" id="t-fav">Favoritas</h2>
+      @let favs = favoritas();
+      <app-movie-grid id="favoritas-grid" [peliculas]="favs ?? []" />
+      @if (favs?.length === 0) {
+        <p class="pj-empty" id="sin-favoritas">Todavía no tienes favoritas. Pulsa el corazón de cualquier póster.</p>
+      }
+    </section>
+  </div>
+</main>

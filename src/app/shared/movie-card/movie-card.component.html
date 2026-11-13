@@ -1,0 +1,10 @@
+@let p = pelicula();
+<article class="poster-card">
+  <div class="poster-wrap">
+    <a [routerLink]="['/pelicula', p.id]" [attr.aria-label]="'Ver detalle de ' + p.titulo"><app-poster [pelicula]="p" /></a>
+    <button type="button" class="fav-btn" [class.active]="favorita()" [attr.aria-pressed]="favorita()"
+      [attr.aria-label]="(favorita() ? 'Quitar de' : 'Añadir a') + ' favoritas: ' + p.titulo" (click)="alternarFavorita()">♥</button>
+  </div>
+  <h3 class="poster-title">{{ p.titulo }}</h3>
+  <p class="poster-meta">{{ meta() }}</p>
+</article>

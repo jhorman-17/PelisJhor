@@ -1,0 +1,44 @@
+// Variables Sass compartidas. Cada componente las importa con `@use "variables" as *;`.
+@use "sass:color";
+
+// Superficies
+$fondo: #0d1316;
+$fondo-elevado: #121a1f;
+$superficie: #172228;
+$superficie-2: #1f2d34;
+$borde: #2a3a42;
+$borde-fuerte: #3d525b;
+
+// Texto
+$titulos: #f3efe6;
+$texto: #d3cec5;
+$texto-2: #a1abad;
+$texto-tenue: #86939a;
+
+// Acento (ámbar) y favoritas (coral)
+$acento: #f2b441;
+$acento-hover: #ffc95e;
+$acento-press: #d99a24;
+$sobre-acento: #1a1305;
+$favorita: #ff7d72;
+
+// Tipografía
+$fuente-ui: "Inter", "DM Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+$fuente-editorial: "Lora", "Source Serif 4", Georgia, serif;
+
+// Forma y movimiento
+$radio: 6px;
+$radio-lg: 10px;
+$transicion: 160ms ease;
+
+// Puntos de quiebre (los de Bootstrap)
+$bp-sm: 576px;
+$bp-md: 768px;
+$bp-lg: 992px;
+$bp-xl: 1200px;
+$columnas-xl: 8; // pósteres por fila desde $bp-xl
+
+// Devuelve "r, g, b", el formato de las variables --bs-*-rgb de Bootstrap.
+@function canales-rgb($c) {
+  @return color.channel($c, "red", $space: rgb), color.channel($c, "green", $space: rgb), color.channel($c, "blue", $space: rgb);
+}

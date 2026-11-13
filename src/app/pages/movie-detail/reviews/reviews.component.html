@@ -1,0 +1,40 @@
+<section class="pj-section" aria-labelledby="t-res">
+  <h2 class="pj-eyebrow" id="t-res">Reseñas</h2>
+  <div class="row g-4">
+    <div class="col-12 col-md-5">
+      <form class="pj-card" novalidate [formGroup]="formulario" (ngSubmit)="publicar()">
+        <div class="mb-3">
+          <label class="form-label pj-label" for="r-autor">Nombre o seudónimo</label>
+          <input class="form-control" id="r-autor" maxlength="40" formControlName="autor">
+        </div>
+        <div class="mb-3">
+          <label class="form-label pj-label" for="r-texto">Tu reseña</label>
+          <textarea class="form-control" id="r-texto" rows="4" maxlength="1000" formControlName="texto"></textarea>
+        </div>
+        <div class="mb-3">
+          <span class="form-label pj-label d-block" id="l-estrellas">Calificación</span>
+          @let elegidas = formulario.controls.estrellas.value;
+          <div class="star-input" role="group" aria-labelledby="l-estrellas">
+            @for (n of opcionesEstrellas; track n) {
+              <button type="button" [class.on]="n <= elegidas" [attr.aria-label]="n + ' estrella(s)'" [attr.aria-pressed]="n <= elegidas"
+                (click)="elegirEstrellas(n)">★</button>
+            }
+          </div>
+        </div>
+        <p class="text-danger small" role="alert">{{ error() }}</p>
+        <button type="submit" class="btn btn-pj-primary">Publicar reseña</button>
+      </form>
+    </div>
+    <div class="col-12 col-md-7" id="lista-resenas">
+      @for (r of resenas(); track $index) {
+        <article class="pj-card mb-2">
+          <span class="review-user">{{ r.autor }}</span>&ngsp;<app-stars [valor]="r.estrellas" />
+          <p class="review-text">{{ r.texto }}</p>
+          <p class="pj-meta mb-0">{{ r.fecha | date: "d/M/y" }}</p>
+        </article>
+      } @empty {
+        <p class="pj-empty">Aún no hay reseñas. ¡Escribe la primera!</p>
+      }
+    </div>
+  </div>
+</section>

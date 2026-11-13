@@ -1,0 +1,23 @@
+@use "mixins";
+
+:host { display: block; }
+
+.contacto-titulo { @include mixins.titulo-pagina; }
+.contacto-intro {
+  max-width: 62ch; margin: 0;
+  font-family: var(--pj-font-editorial); font-size: 16px; line-height: 1.7; color: var(--pj-text);
+}
+
+.contacto-datos {
+  @include mixins.lista-datos;
+  dd { overflow-wrap: anywhere; }
+  a { color: var(--pj-accent); }
+  a:hover { color: var(--pj-accent-hover); }
+}
+
+// Confirmación del formulario, con el mismo borde ámbar de las reseñas
+.contacto-aviso {
+  padding: 14px 16px; border-radius: var(--pj-radius);
+  background: var(--pj-accent-soft); border-left: 3px solid var(--pj-accent);
+  color: var(--pj-heading); font-size: 14px;
+}

@@ -1,0 +1,13 @@
+// Estilos globales de PelisJhor. Los estilos propios de cada componente están en su
+// archivo *.component.scss; aquí queda lo que comparten varias páginas.
+@use "tema";
+@use "base";
+@use "formularios";
+@use "botones";
+@use "peliculas";
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+  .poster-card:hover .poster-wrap, .poster-card:has(:focus-visible) .poster-wrap,
+  .poster-card:hover .poster-img, .btn-pj-primary:hover, .fav-btn:hover { transform: none; }
+}

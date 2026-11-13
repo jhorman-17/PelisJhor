@@ -1,0 +1,79 @@
+@use "variables" as *;
+
+:host { display: block; }
+
+.pj-nav {
+  background: rgba($fondo, .86);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--pj-border);
+  padding: 10px 0;
+
+  .navbar-toggler-icon {
+    --bs-navbar-toggler-icon-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23d3cec5' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+  }
+
+  @media (max-width: $bp-md - .02px) {
+    .navbar-collapse { padding: 12px 0 8px; }
+    form[role="search"] { margin-top: 8px; }
+  }
+
+  input[type="search"] {
+    width: 100%;
+    padding-left: 38px; border-radius: 999px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2386939a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-3.5-3.5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: 13px center; background-size: 16px;
+
+    @media (min-width: $bp-md) {
+      width: 260px; transition: width 220ms ease, border-color var(--pj-ease), box-shadow var(--pj-ease);
+      &:focus { width: 320px; }
+    }
+    // En tabletas el buscador es más angosto para que quepa el enlace Contactos.
+    @media (min-width: $bp-md) and (max-width: $bp-lg - .02px) {
+      width: 200px;
+      &:focus { width: 215px; }
+    }
+  }
+}
+
+.pj-logo {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--pj-font-editorial); font-weight: 700; font-size: 21px;
+  letter-spacing: -.01em; color: var(--pj-heading);
+
+  &::before {
+    content: ""; flex: none; width: 12px; height: 12px; border-radius: 50%;
+    background: var(--pj-accent);
+    box-shadow: 0 0 0 3px var(--pj-accent-soft), 0 0 16px var(--pj-accent-glow);
+  }
+  &:hover, &:focus { color: #fff; }
+}
+
+.pj-nav-links .nav-link {
+  position: relative; padding: 8px 14px;
+  font-size: 13px; text-transform: uppercase; letter-spacing: .08em;
+  color: var(--pj-text-2); transition: color var(--pj-ease);
+
+  // En escritorio manda el espaciado horizontal de Bootstrap (.navbar-expand-md), como antes de
+  // encapsular los estilos en el componente.
+  @media (min-width: $bp-md) {
+    padding-right: var(--bs-navbar-nav-link-padding-x);
+    padding-left: var(--bs-navbar-nav-link-padding-x);
+  }
+
+  &::after {
+    content: ""; position: absolute; left: 14px; right: 14px; bottom: 2px; height: 2px;
+    background: var(--pj-accent); transform: scaleX(0); transform-origin: left;
+    transition: transform var(--pj-ease);
+  }
+  &:hover,
+  &:focus-visible {
+    color: var(--pj-heading);
+    &::after { transform: scaleX(1); }
+  }
+}
+
+.navbar-toggler {
+  border-color: var(--pj-border-strong);
+  &:focus { box-shadow: none; }
+}

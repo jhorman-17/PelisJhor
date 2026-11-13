@@ -1,0 +1,26 @@
+@use "variables" as *;
+
+.btn-pj-primary {
+  --bs-btn-color: var(--pj-on-accent); --bs-btn-bg: var(--pj-accent); --bs-btn-border-color: var(--pj-accent);
+  --bs-btn-hover-color: var(--pj-on-accent); --bs-btn-hover-bg: var(--pj-accent-hover); --bs-btn-hover-border-color: var(--pj-accent-hover);
+  --bs-btn-active-color: var(--pj-on-accent); --bs-btn-active-bg: var(--pj-accent-press); --bs-btn-active-border-color: var(--pj-accent-press);
+  --bs-btn-focus-shadow-rgb: #{canales-rgb($acento)};
+  --bs-btn-padding-x: 18px; --bs-btn-padding-y: 10px;
+  --bs-btn-font-size: 14px; --bs-btn-font-weight: 700; --bs-btn-border-radius: var(--pj-radius);
+  box-shadow: 0 6px 18px rgba($acento, .18);
+  transition: background-color var(--pj-ease), border-color var(--pj-ease), transform var(--pj-ease);
+
+  &:hover { transform: translateY(-1px); }
+}
+
+.btn-pj-secondary {
+  --bs-btn-color: var(--pj-text); --bs-btn-bg: var(--pj-surface-2); --bs-btn-border-color: var(--pj-border-strong);
+  --bs-btn-hover-color: var(--pj-heading); --bs-btn-hover-bg: #27373f; --bs-btn-hover-border-color: var(--pj-text-muted);
+  --bs-btn-active-color: var(--pj-fav); --bs-btn-active-bg: var(--pj-fav-soft); --bs-btn-active-border-color: var(--pj-fav);
+  --bs-btn-focus-shadow-rgb: #{canales-rgb($acento)};
+  --bs-btn-padding-x: 18px; --bs-btn-padding-y: 10px;
+  --bs-btn-font-size: 14px; --bs-btn-font-weight: 700; --bs-btn-border-radius: var(--pj-radius);
+  transition: background-color var(--pj-ease), border-color var(--pj-ease), color var(--pj-ease);
+
+  &.btn-sm { --bs-btn-padding-y: 6px; --bs-btn-padding-x: 12px; --bs-btn-font-size: 13px; min-height: 38px; }
+}

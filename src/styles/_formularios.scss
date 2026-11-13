@@ -1,0 +1,37 @@
+// Controles de formulario: buscador, filtros del catálogo, reseñas y contacto.
+.form-control,
+.form-select {
+  background-color: var(--pj-surface-2);
+  border: 1px solid var(--pj-border);
+  color: var(--pj-heading);
+  border-radius: var(--pj-radius);
+  font-size: 14px;
+  transition: border-color var(--pj-ease), box-shadow var(--pj-ease);
+
+  &:hover { border-color: var(--pj-border-strong); }
+  &:focus {
+    background-color: var(--pj-surface-2); color: var(--pj-heading);
+    border-color: var(--pj-accent); box-shadow: 0 0 0 3px var(--pj-accent-soft);
+  }
+  &:focus-visible { outline: none; } // ya tienen borde y halo en :focus
+}
+.form-control-sm, .form-select-sm { min-height: 38px; font-size: 14px; }
+.form-control::placeholder { color: var(--pj-text-muted); opacity: 1; }
+.form-select option { background: var(--pj-surface); color: var(--pj-heading); }
+textarea.form-control { font-family: var(--pj-font-editorial); font-size: 16px; line-height: 1.6; }
+
+.form-check-input {
+  width: 1.15em; height: 1.15em;
+  background-color: var(--pj-surface-2); border: 1px solid var(--pj-border-strong);
+
+  &:checked[type="checkbox"] {
+    background-color: var(--pj-accent); border-color: var(--pj-accent);
+    --bs-form-check-bg-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%231a1305' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e");
+  }
+  &:focus { border-color: var(--pj-accent); box-shadow: 0 0 0 3px var(--pj-accent-soft); }
+}
+
+.pj-label, .form-check-label {
+  font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--pj-text-2);
+}
+.form-label { margin-bottom: 4px; }

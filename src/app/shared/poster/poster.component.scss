@@ -1,0 +1,3 @@
+// El componente no añade una caja propia: la imagen queda directamente dentro de su contenedor.
+// Los estilos de .poster-img y .poster-error son globales (src/styles/_peliculas.scss).
+:host { display: contents; }

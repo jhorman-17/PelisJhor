@@ -1,0 +1,43 @@
+@use "variables" as *;
+@use "mixins";
+
+:host { display: block; }
+
+#detalle {
+  h1 {
+    --bs-white-rgb: #{canales-rgb($titulos)}; // .text-white en tono crema
+    @include mixins.titulo-pagina;
+
+    small {
+      margin-left: 8px; font-family: var(--pj-font-ui); font-size: .42em; font-weight: 400;
+      letter-spacing: .04em; color: var(--pj-text-2); white-space: nowrap;
+    }
+  }
+  .poster-wrap { box-shadow: 0 0 0 1px var(--pj-border-strong), 0 18px 40px rgba(0, 0, 0, .5); }
+}
+#media .stars { font-size: 20px; }
+
+.detalle-datos {
+  padding-top: 4px;
+  @include mixins.lista-datos;
+}
+
+.badge-pj {
+  display: inline-block; padding: 3px 10px; border-radius: 999px;
+  background: var(--pj-surface-2); color: var(--pj-text); border: 1px solid var(--pj-border-strong);
+  font-size: 12px; font-weight: 400; letter-spacing: .04em;
+}
+
+// Botón grande de favorita. Parte de .fav-btn (global) y cambia su forma.
+.fav-btn-lg {
+  --bs-btn-color: var(--pj-text); --bs-btn-bg: var(--pj-surface-2); --bs-btn-border-color: var(--pj-border-strong);
+  --bs-btn-hover-color: var(--pj-heading); --bs-btn-hover-bg: var(--pj-surface-2); --bs-btn-hover-border-color: var(--pj-fav);
+  --bs-btn-active-color: var(--pj-fav); --bs-btn-active-bg: var(--pj-fav-soft); --bs-btn-active-border-color: var(--pj-fav);
+  position: static; z-index: auto; display: inline-flex; align-items: center; gap: 8px;
+  width: auto; height: auto; padding: 10px 18px; border-radius: var(--pj-radius);
+  font-size: 14px; font-weight: 700; transform: none;
+  -webkit-text-stroke: 0; -webkit-backdrop-filter: none; backdrop-filter: none;
+
+  &:hover { background: var(--pj-surface-2); border-color: var(--pj-fav); color: var(--pj-heading); transform: none; -webkit-text-stroke: 0; }
+  &.active { color: var(--pj-fav); background: var(--pj-fav-soft); border-color: var(--pj-fav); -webkit-text-stroke: 0; }
+}

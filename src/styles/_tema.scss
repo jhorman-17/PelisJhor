@@ -1,0 +1,50 @@
+@use "sass:meta";
+@use "variables" as *;
+
+// Variables CSS. Sass no evalúa el valor de una propiedad personalizada (--*),
+// por eso cada variable Sass se inserta con interpolación #{...}.
+:root,
+[data-bs-theme="dark"] {
+  // Superficies
+  --pj-bg: #{$fondo};
+  --pj-bg-raised: #{$fondo-elevado};
+  --pj-surface: #{$superficie};
+  --pj-surface-2: #{$superficie-2};
+  --pj-border: #{$borde};
+  --pj-border-strong: #{$borde-fuerte};
+
+  // Texto
+  --pj-heading: #{$titulos};
+  --pj-text: #{$texto};
+  --pj-text-2: #{$texto-2};
+  --pj-text-muted: #{$texto-tenue};
+
+  // Acento y favoritas
+  --pj-accent: #{$acento};
+  --pj-accent-hover: #{$acento-hover};
+  --pj-accent-press: #{$acento-press};
+  --pj-on-accent: #{$sobre-acento};
+  --pj-accent-soft: #{rgba($acento, .14)};
+  --pj-accent-glow: #{rgba($acento, .2)};
+  --pj-fav: #{$favorita};
+  --pj-fav-soft: #{rgba($favorita, .16)};
+
+  // meta.inspect conserva las comillas de los nombres de fuente
+  --pj-font-ui: #{meta.inspect($fuente-ui)};
+  --pj-font-editorial: #{meta.inspect($fuente-editorial)};
+
+  // Forma y movimiento
+  --pj-radius: #{$radio};
+  --pj-radius-lg: #{$radio-lg};
+  --pj-ease: #{$transicion};
+
+  // Bootstrap
+  --bs-body-bg: var(--pj-bg);
+  --bs-body-color: var(--pj-text);
+  --bs-body-font-family: var(--pj-font-ui);
+  --bs-border-color: var(--pj-border);
+  --bs-border-radius: var(--pj-radius);
+  --bs-secondary-color: var(--pj-text-2);
+  --bs-link-color-rgb: #{canales-rgb($acento)};
+  --bs-link-hover-color-rgb: #{canales-rgb($acento-hover)};
+}

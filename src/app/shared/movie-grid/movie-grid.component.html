@@ -1,0 +1,4 @@
+@for (pelicula of peliculas(); track pelicula.id) {
+  <app-movie-card [pelicula]="pelicula" />
+}
+<ng-content />

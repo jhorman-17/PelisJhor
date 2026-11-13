@@ -1,0 +1,13 @@
+// Estilos que comparten la ficha de una película y la página de contactos.
+
+// Título grande de página
+@mixin titulo-pagina {
+  font-family: var(--pj-font-editorial); font-size: clamp(30px, 4.5vw, 44px);
+  line-height: 1.12; letter-spacing: -.015em; margin-bottom: 10px;
+}
+
+// Lista de datos <dl>: etiqueta pequeña en mayúsculas y valor debajo
+@mixin lista-datos {
+  dt { font-size: 12px; font-weight: 400; text-transform: uppercase; letter-spacing: .08em; color: var(--pj-text-2); }
+  dd { margin-bottom: 14px; font-size: 15px; color: var(--pj-heading); }
+}

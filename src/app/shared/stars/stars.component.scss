@@ -1,0 +1,3 @@
+:host { display: inline-flex; gap: 2px; font-size: 17px; line-height: 1; letter-spacing: 0; white-space: nowrap; vertical-align: middle; }
+.star-on { color: var(--pj-accent); }
+.star-off { color: transparent; -webkit-text-stroke: 1px var(--pj-text-muted); }
